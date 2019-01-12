@@ -712,10 +712,10 @@ bNodeSocket *nodeInsertStaticSocket(bNodeTree *ntree, bNode *node, int in_out, i
 	return sock;
 }
 
-static void node_socket_free(bNodeTree *UNUSED(ntree), bNodeSocket *sock, bNode *UNUSED(node))
+static void node_socket_free(bNodeTree *UNUSED(ntree), bNodeSocket *sock, bNode *UNUSED(node), bool do_id_user)
 {
 	if (sock->prop) {
-		IDP_FreeProperty(sock->prop);
+		IDP_FreeProperty_ex(sock->prop, do_id_user);
 		MEM_freeN(sock->prop);
 	}
 
@@ -738,7 +738,7 @@ void nodeRemoveSocket(bNodeTree *ntree, bNode *node, bNodeSocket *sock)
 	BLI_remlink(&node->inputs, sock);
 	BLI_remlink(&node->outputs, sock);
 
-	node_socket_free(ntree, sock, node);
+	node_socket_free(ntree, sock, node, true);
 	MEM_freeN(sock);
 
 	node->update |= NODE_UPDATE;
@@ -758,14 +758,14 @@ void nodeRemoveAllSockets(bNodeTree *ntree, bNode *node)
 
 	for (sock = node->inputs.first; sock; sock = sock_next) {
 		sock_next = sock->next;
-		node_socket_free(ntree, sock, node);
+		node_socket_free(ntree, sock, node, true);
 		MEM_freeN(sock);
 	}
 	BLI_listbase_clear(&node->inputs);
 
 	for (sock = node->outputs.first; sock; sock = sock_next) {
 		sock_next = sock->next;
-		node_socket_free(ntree, sock, node);
+		node_socket_free(ntree, sock, node, true);
 		MEM_freeN(sock);
 	}
 	BLI_listbase_clear(&node->outputs);
@@ -1676,7 +1676,7 @@ static void node_unlink_attached(bNodeTree *ntree, bNode *parent)
 }
 
 /** \note caller needs to manage node->id user */
-static void node_free_node_ex(bNodeTree *ntree, bNode *node, bool remove_animdata, bool use_api_free_cb)
+static void node_free_node_ex(bNodeTree *ntree, bNode *node, bool remove_animdata, bool use_api_free_cb, bool do_id_user)
 {
 	bNodeSocket *sock, *nextsock;
 
@@ -1729,19 +1729,19 @@ static void node_free_node_ex(bNodeTree *ntree, bNode *node, bool remove_animdat
 
 	for (sock = node->inputs.first; sock; sock = nextsock) {
 		nextsock = sock->next;
-		node_socket_free(ntree, sock, node);
+		node_socket_free(ntree, sock, node, do_id_user);
 		MEM_freeN(sock);
 	}
 	for (sock = node->outputs.first; sock; sock = nextsock) {
 		nextsock = sock->next;
-		node_socket_free(ntree, sock, node);
+		node_socket_free(ntree, sock, node, do_id_user);
 		MEM_freeN(sock);
 	}
 
 	BLI_freelistN(&node->internal_links);
 
 	if (node->prop) {
-		IDP_FreeProperty(node->prop);
+		IDP_FreeProperty_ex(node->prop, do_id_user);
 		MEM_freeN(node->prop);
 	}
 
@@ -1753,7 +1753,7 @@ static void node_free_node_ex(bNodeTree *ntree, bNode *node, bool remove_animdat
 
 void nodeFreeNode(bNodeTree *ntree, bNode *node)
 {
-	node_free_node_ex(ntree, node, true, true);
+	node_free_node_ex(ntree, node, true, true, true);
 }
 
 static void node_socket_interface_free(bNodeTree *UNUSED(ntree), bNodeSocket *sock)
@@ -1823,7 +1823,7 @@ void ntreeFreeTree(bNodeTree *ntree)
 
 	for (node = ntree->nodes.first; node; node = next) {
 		next = node->next;
-		node_free_node_ex(ntree, node, false, false);
+		node_free_node_ex(ntree, node, false, false, false);
 	}
 
 	/* free interface sockets */
@@ -2588,7 +2588,7 @@ void BKE_node_clipboard_clear(void)
 
 	for (node = node_clipboard.nodes.first; node; node = node_next) {
 		node_next = node->next;
-		node_free_node_ex(NULL, node, false, false);
+		node_free_node_ex(NULL, node, false, false, false);
 	}
 	BLI_listbase_clear(&node_clipboard.nodes);
 
