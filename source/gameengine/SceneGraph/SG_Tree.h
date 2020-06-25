@@ -98,7 +98,7 @@ public:
 
 	struct greater
 	{
-		bool operator()(const SG_Tree *a, const SG_Tree *b)
+		bool operator()(const SG_Tree *a, const SG_Tree *b) const
 		{
 			return a->volume() > b->volume();
 		}
