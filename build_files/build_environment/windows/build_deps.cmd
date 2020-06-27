@@ -5,6 +5,7 @@ if NOT "%1" == "" (
     set VSVER=12.0
     set VSVER_SHORT=12
     set BuildDir=VS12
+    set CMAKE_BUILDER=Visual Studio 12 2013
     goto par2
   )
 	if "%1" == "2015" (
@@ -12,6 +13,7 @@ if NOT "%1" == "" (
     set VSVER=14.0
     set VSVER_SHORT=14
     set BuildDir=VS14
+    set CMAKE_BUILDER=Visual Studio 14 2015
     goto par2
   )
 	if "%1" == "2017" (
@@ -19,13 +21,22 @@ if NOT "%1" == "" (
     set VSVER=15.0
     set VSVER_SHORT=15
     set BuildDir=VS15
+    set CMAKE_BUILDER=Visual Studio 15 2017
+    goto par2
+  )
+	if "%1" == "2019" (
+    echo "Building for VS2019"
+    set VSVER=16.0
+    set VSVER_SHORT=16
+    set BuildDir=VS16
+    set CMAKE_BUILDER=Visual Studio 16 2019
     goto par2
   )
   
 )
 :usage
 
-Echo Usage build_deps 2013/2015/2017 x64/x86
+Echo Usage build_deps 2013/2015/2017/2019 x64/x86
 goto exit
 :par2
 if NOT "%2" == "" (
@@ -33,32 +44,14 @@ if NOT "%2" == "" (
     echo "Building for x86"
     set HARVESTROOT=Windows_vc
     set ARCH=86
-		if "%1" == "2013" (
-			set CMAKE_BUILDER=Visual Studio 12 2013
-		)
-		if "%1" == "2015" (
-			set CMAKE_BUILDER=Visual Studio 14 2015
-		)
-		if "%1" == "2017" (
-			set CMAKE_BUILDER=Visual Studio 15 2017
-		)
-		
+    set CMAKE_GENERATOR=Win32
     goto start
   )
 	if "%2" == "x64" (
     echo "Building for x64"
     set HARVESTROOT=Win64_vc
     set ARCH=64
-		if "%1" == "2013" (
-			set CMAKE_BUILDER=Visual Studio 12 2013 Win64
-		)
-		if "%1" == "2015" (
-			set CMAKE_BUILDER=Visual Studio 14 2015 Win64
-		)
-		if "%1" == "2017" (
-			set CMAKE_BUILDER=Visual Studio 15 2017 Win64
-		)
-		
+    set CMAKE_GENERATOR=x64
     goto start
   )
 )
@@ -117,7 +110,7 @@ set path=%BUILD_DIR%\downloads\mingw\mingw64\msys\1.0\bin\;%BUILD_DIR%\downloads
 mkdir %STAGING%\%BuildDir%%ARCH%R
 cd %Staging%\%BuildDir%%ARCH%R
 echo %DATE% %TIME% : Start > %StatusFile%
-cmake -G "%CMAKE_BUILDER%" %SOURCE_DIR% -DDOWNLOAD_DIR=%BUILD_DIR%/downloads -DBUILD_MODE=Release -DHARVEST_TARGET=%HARVEST_DIR%/%HARVESTROOT%%VSVER_SHORT%/
+cmake -G "%CMAKE_BUILDER%" -A %CMAKE_GENERATOR% %SOURCE_DIR% -DDOWNLOAD_DIR=%BUILD_DIR%/downloads -DBUILD_MODE=Release -DHARVEST_TARGET=%HARVEST_DIR%/%HARVESTROOT%%VSVER_SHORT%/
 echo %DATE% %TIME% : Release Configuration done >> %StatusFile%
 if "%dobuild%" == "1" (
 	msbuild /m "ll.vcxproj" /p:Configuration=Release /fl /flp:logfile=BlenderDeps_llvm.log;Verbosity=normal
@@ -129,13 +122,13 @@ echo %DATE% %TIME% : Release Harvest done >> %StatusFile%
 cd %BUILD_DIR%
 mkdir %STAGING%\%BuildDir%%ARCH%D
 cd %Staging%\%BuildDir%%ARCH%D
-cmake -G "%CMAKE_BUILDER%" %SOURCE_DIR% -DDOWNLOAD_DIR=%BUILD_DIR%/downloads -DCMAKE_BUILD_TYPE=Debug -DBUILD_MODE=Debug -DHARVEST_TARGET=%HARVEST_DIR%/%HARVESTROOT%%VSVER_SHORT%/  %CMAKE_DEBUG_OPTIONS%
+cmake -G "%CMAKE_BUILDER%" -A %CMAKE_GENERATOR% %SOURCE_DIR% -DDOWNLOAD_DIR=%BUILD_DIR%/downloads -DCMAKE_BUILD_TYPE=Debug -DBUILD_MODE=Debug -DHARVEST_TARGET=%HARVEST_DIR%/%HARVESTROOT%%VSVER_SHORT%/  %CMAKE_DEBUG_OPTIONS%
 echo %DATE% %TIME% : Debug Configuration done >> %StatusFile%
 if "%dobuild%" == "1" (
 	msbuild /m "ll.vcxproj" /p:Configuration=Debug /fl /flp:logfile=BlenderDeps_llvm.log;;Verbosity=normal 
 	msbuild /m "BlenderDependencies.sln" /p:Configuration=Debug /verbosity:n /fl /flp:logfile=BlenderDeps.log;;Verbosity=normal
 	echo %DATE% %TIME% : Debug Build done >> %StatusFile%
-	cmake --build . --target Harvest_Debug_Results> Harvest_Debug.txt
+	cmake --build . --target Harvest_Debug_Results > Harvest_Debug.txt
 )
 echo %DATE% %TIME% : Debug Harvest done >> %StatusFile%
 cd %BUILD_DIR%

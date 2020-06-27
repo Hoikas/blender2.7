@@ -43,3 +43,21 @@ index 1f9a3ee..d151e9a 100644
          return isnan( value );
  #else
          return std::isnan(value);
+diff --git a/DAEValidator/library/src/ArgumentParser.cpp b/DAEValidator/library/src/ArgumentParser.cpp
+index 897e4dcf..98a69ff1 100644
+--- a/DAEValidator/library/src/ArgumentParser.cpp
++++ b/DAEValidator/library/src/ArgumentParser.cpp
+@@ -6,10 +6,10 @@
+ 
+ using namespace std;
+ 
+-#ifdef _MSC_VER
+-#define NOEXCEPT _NOEXCEPT
+-#else
++#ifndef _NOEXCEPT
+ #define NOEXCEPT noexcept
++#else
++#define NOEXCEPT _NOEXCEPT
+ #endif
+ 
+ namespace opencollada

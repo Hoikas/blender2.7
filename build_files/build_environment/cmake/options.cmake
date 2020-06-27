@@ -191,13 +191,17 @@ set(DEFAULT_CMAKE_FLAGS
 
 if(WIN32)
 	#we need both flavors to build the thumbnail dlls
-	if(MSVC12)
-		set(GENERATOR_32 "Visual Studio 12 2013")
-		set(GENERATOR_64 "Visual Studio 12 2013 Win64")
-	elseif(MSVC14)
-		set(GENERATOR_32 "Visual Studio 14 2015")
-		set(GENERATOR_64 "Visual Studio 14 2015 Win64")
+	if(MSVC_TOOLSET_VERSION EQUAL 120)
+		set(GENERATOR "Visual Studio 12 2013")
+	elseif(MSVC_TOOLSET_VERSION EQUAL 140)
+		set(GENERATOR "Visual Studio 14 2015")
+	elseif(MSVC_TOOLSET_VERSION EQUAL 141)
+		set(GENERATOR "Visual Studio 15 2017")
+	elseif(MSVC_TOOLSET_VERSION EQUAL 142)
+		set(GENERATOR "Visual Studio 16 2019")
 	endif()
+	set(GENERATOR_PLATFORM_32 "Win32")
+	set(GENERATOR_PLATFORM_64 "x64")
 endif()
 
 

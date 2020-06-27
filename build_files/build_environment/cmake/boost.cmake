@@ -29,9 +29,15 @@ if(WIN32)
 		set(PYTHON_OUTPUTDIR ${BUILD_DIR}/python/src/external_python/pcbuild/win32/)
 		set(BOOST_ADDRESS_MODEL 32)
 	endif()
-	if(MSVC14)
+	if(MSVC_TOOLSET_VERSION EQUAL 140)
 		set(BOOST_TOOLSET toolset=msvc-14.0)
 		set(BOOST_COMPILER_STRING -vc140)
+	elseif(MSVC_TOOLSET_VERSION EQUAL 141)
+		set(BOOST_TOOLSET toolset=msvc-14.1)
+		set(BOOST_COMPILER_STRING -vc141)
+	elseif(MSVC_TOOLSET_VERSION EQUAL 142)
+		set(BOOST_TOOLSET toolset=msvc-14.2)
+		set(BOOST_COMPILER_STRING -vc142)
 	endif()
 	set(JAM_FILE ${BUILD_DIR}/boost/src/external_boost/user-config.jam)
 	set(semi_path "${PATCH_DIR}/semi.txt")
@@ -42,13 +48,13 @@ if(WIN32)
 								echo.   : ${BUILD_DIR}/python/src/external_python/pcbuild >> "${JAM_FILE}" &&
 								type ${semi_path} >> "${JAM_FILE}"
 	)
-	set(BOOST_BUILD_COMMAND bjam)
+	set(BOOST_BUILD_COMMAND b2)
 	#--user-config=user-config.jam
 	set(BOOST_BUILD_OPTIONS runtime-link=static )
 	#set(BOOST_WITH_PYTHON --with-python)
 	set(BOOST_HARVEST_CMD 	${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/lib/ ${HARVEST_TARGET}/boost/lib/ )
 	if(BUILD_MODE STREQUAL Release)
-		set(BOOST_HARVEST_CMD ${BOOST_HARVEST_CMD} && ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/include/boost-1_68/ ${HARVEST_TARGET}/boost/include/)
+		set(BOOST_HARVEST_CMD ${BOOST_HARVEST_CMD} && ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/include/boost-1_70/ ${HARVEST_TARGET}/boost/include/)
 	endif()
 
 elseif(APPLE)
@@ -91,7 +97,7 @@ string(TOLOWER ${BUILD_MODE} BOOST_BUILD_TYPE)
 ExternalProject_Add(external_boost
 	URL ${BOOST_URI}
 	DOWNLOAD_DIR ${DOWNLOAD_DIR}
-	URL_HASH MD5=${BOOST_HASH}
+	URL_HASH SHA256=${BOOST_HASH}
 	PREFIX ${BUILD_DIR}/boost
 	UPDATE_COMMAND	""
 	PATCH_COMMAND ${BOOST_PATCH_COMMAND}

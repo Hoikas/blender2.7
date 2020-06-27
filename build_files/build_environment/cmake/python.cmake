@@ -22,12 +22,6 @@ if(BUILD_MODE STREQUAL Debug)
 endif()
 
 if(WIN32)
-	if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-		set(SSL_POSTFIX -x64)
-	else()
-		set(SSL_POSTFIX)
-	endif()
-
 	set(PYTHON_BINARY ${BUILD_DIR}/python/src/external_python/run/python${PYTHON_POSTFIX}.exe)
 
 	macro(cmake_to_dos_path MsysPath ResultingPath)
@@ -56,10 +50,10 @@ if(WIN32)
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND cd ${BUILD_DIR}/python/src/external_python/pcbuild/ && set IncludeTkinter=false && call build.bat -e -p ${PYTHON_ARCH} -c ${BUILD_MODE}
 		INSTALL_COMMAND COMMAND
-			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.dll ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.dll &&
-			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.pdb ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.pdb &&
-			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.lib ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.lib &&
-			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.exp ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.exp &&
+			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.dll ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.dll &&
+			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.pdb ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.pdb &&
+			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.lib ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.lib &&
+			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.exp ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.exp &&
 			${CMAKE_COMMAND} -E copy_directory ${BUILD_DIR}/python/src/external_python/include ${LIBDIR}/python/include/Python${PYTHON_SHORT_VERSION} &&
 			${CMAKE_COMMAND} -E copy "${BUILD_DIR}/python/src/external_python/PC/pyconfig.h" ${LIBDIR}/python/include/Python${PYTHON_SHORT_VERSION}/pyconfig.h
 	)
@@ -118,11 +112,9 @@ if(MSVC)
 		COMMAND ${CMAKE_COMMAND} -E copy_directory ${BUILD_DIR}/python/src/external_python/lib ${BUILD_DIR}/python/src/external_python/redist/lib
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_asyncio${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_asyncio${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_bz2${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_bz2${PYTHON_POSTFIX}.pyd
-		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_contextvars${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_contextvars${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_ctypes${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_ctypes${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_ctypes_test${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_ctypes_test${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_decimal${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_decimal${PYTHON_POSTFIX}.pyd
-		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_distutils_findvs${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_distutils_findvs${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_elementtree${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_elementtree${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_hashlib${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_hashlib${PYTHON_POSTFIX}.pyd
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/_lzma${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/_lzma${PYTHON_POSTFIX}.pyd
@@ -145,8 +137,8 @@ if(MSVC)
 		#xxlimited is an example extension module, we don't need to ship it and debug doesn't build it
 		#leaving it commented out, so I won't get confused again with the next update.
 		#COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/xxlimited${PYTHON_POSTFIX}.pyd" ${BUILD_DIR}/python/src/external_python/redist/lib/xxlimited${PYTHON_POSTFIX}.pyd
-		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/libssl-1_1${SSL_POSTFIX}.dll" ${BUILD_DIR}/python/src/external_python/redist/lib/libssl-1_1${SSL_POSTFIX}.dll
-		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/libcrypto-1_1${SSL_POSTFIX}.dll" ${BUILD_DIR}/python/src/external_python/redist/lib/libcrypto-1_1${SSL_POSTFIX}.dll
+		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/libssl-1_1.dll" ${BUILD_DIR}/python/src/external_python/redist/lib/libssl-1_1.dll
+		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/libcrypto-1_1.dll" ${BUILD_DIR}/python/src/external_python/redist/lib/libcrypto-1_1.dll
 		COMMAND ${CMAKE_COMMAND} -E copy "${PYTHON_OUTPUTDIR}/sqlite3${PYTHON_POSTFIX}.dll" ${BUILD_DIR}/python/src/external_python/redist/lib/sqlite3${PYTHON_POSTFIX}.dll
 		COMMAND ${CMAKE_COMMAND} -E chdir "${BUILD_DIR}/python/src/external_python/redist" ${CMAKE_COMMAND} -E tar "cfvz" "${LIBDIR}/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.tar.gz" "."
 		COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/python/ ${HARVEST_TARGET}/python/

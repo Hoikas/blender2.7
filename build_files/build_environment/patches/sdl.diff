@@ -10,6 +10,15 @@ diff -ru ./src/video/SDL_video.c ./src/video/SDL_video.c
      if(HAVE_LIBICONV)
        list(APPEND EXTRA_LIBS iconv)
        set(HAVE_ICONV 1)
+@@ -1424,5 +1424,8 @@
+   # Libraries for Win32 native and MinGW
+   list(APPEND EXTRA_LIBS user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32)
++  if(MSVC_VERSION GREATER_EQUAL 1920)
++    list(APPEND EXTRA_LIBS vcruntime)
++  endif()
+ 
+   # TODO: in configure.ac the check for timers is set on
+   # cygwin | mingw32* - does this include mingw32CE?
 --- src/video/SDL_video.c	2018-09-10 23:27:57.000000000 +0200
 +++ src/video/SDL_video.c	2018-09-10 23:28:09.000000000 +0200
 @@ -1176,7 +1176,7 @@

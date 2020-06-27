@@ -175,10 +175,10 @@ if(NOT DEFINED LIBDIR)
 	# Can be 1910..1912
 	if(MSVC_VERSION GREATER 1919)
 		message(STATUS "Visual Studio 2019 detected.")
-		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc14)
+		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc16)
 	elseif(MSVC_VERSION GREATER 1909)
 		message(STATUS "Visual Studio 2017 detected.")
-		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc14)
+		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc15)
 	elseif(MSVC_VERSION EQUAL 1900)
 		message(STATUS "Visual Studio 2015 detected.")
 		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc14)
@@ -374,11 +374,11 @@ if(WITH_BOOST)
 		set(BOOST_INCLUDE_DIR ${BOOST}/include)
 		set(BOOST_LIBPATH ${BOOST}/lib)
 		if(CMAKE_CL_64)
-			set(BOOST_POSTFIX "vc140-mt-s-x64-1_68.lib")
-			set(BOOST_DEBUG_POSTFIX "vc140-mt-sgd-x64-1_68.lib")
+			set(BOOST_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-s-x64-1_70.lib")
+			set(BOOST_DEBUG_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-sgd-x64-1_70.lib")
 		else()
-			set(BOOST_POSTFIX "vc140-mt-s-x32-1_68.lib")
-			set(BOOST_DEBUG_POSTFIX "vc140-mt-sgd-x32-1_68.lib")
+			set(BOOST_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-s-x32-1_70.lib")
+			set(BOOST_DEBUG_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-sgd-x32-1_70.lib")
 		endif()
 		set(BOOST_LIBRARIES
 			optimized ${BOOST_LIBPATH}/libboost_date_time-${BOOST_POSTFIX}
@@ -555,7 +555,7 @@ find_program(SIGNTOOL_EXE signtool
 		"$ENV{${ProgramFilesX86_NAME}}/Windows Kits/8.0/bin/x86/"
 		"$ENV{ProgramFiles}/Windows Kits/8.0/bin/x86/"
 )
-set(WINTAB_INC ${LIBDIR}/wintab/include)
+set(WINTAB_INC ${CMAKE_CURRENT_SOURCE_DIR}/extern/wintab/include)
 
 if(WITH_OPENAL)
 	set(OPENAL ${LIBDIR}/openal)

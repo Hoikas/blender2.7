@@ -25,12 +25,6 @@ set(LLVM_EXTRA_ARGS
 	-DLLVM_ENABLE_TERMINFO=OFF
 )
 
-if(WIN32)
-	set(LLVM_GENERATOR "Ninja")
-else()
-	set(LLVM_GENERATOR "Unix Makefiles")
-endif()
-
 # short project name due to long filename issues on windows
 ExternalProject_Add(ll
 	URL ${LLVM_URI}
