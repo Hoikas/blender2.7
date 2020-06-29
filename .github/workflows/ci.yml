@@ -1,0 +1,193 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      deps-artifact-name: blender-lib-${{ matrix.os }}-${{ matrix.arch }}
+      final-artifact-name: blender-${{ matrix.os }}-${{ matrix.arch }}
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-10.15, windows-2019]
+        arch: [x64]
+        include:
+          - os: windows-2019
+            arch: x86
+
+    steps:
+      - name: Sanity Check
+        run: |
+          if ([string]::IsNullOrWhiteSpace("${{ secrets.API_TOKEN }}")) {
+            throw "CI cannot proceed without a valid GitHub API Token."
+          }
+
+      - uses: actions/checkout@v2
+        with:
+          path: blender
+          # Don't touch - the checkout fails otherwise.
+          fetch-depth: 0
+          submodules: recursive
+      - uses: actions/setup-python@v2
+
+      # Determine if any of the build environment files were changed in this event
+      - name: Check Build Environment Changes
+        id: check-build-files
+        run: |
+          $event = ConvertFrom-Json @"
+          ${{ toJson(github.event) }}
+          "@
+          $event_name = "${{ github.event_name }}"
+          if ($event_name -Eq "push") {
+            $commits = $event.commits
+          } elseif ($event_name -Eq "pull_request") {
+            Write-Host "Fetching pull request commits..."
+            $commits = Invoke-RestMethod `
+              -Uri $($event.pull_request.commits_url) `
+              -Authentication OAuth `
+              -Token $(ConvertTo-SecureString -AsPlainText -Force ${{ secrets.API_TOKEN }})
+          } else {
+            throw "Unhandled event type: $event_name"
+          }
+
+          foreach ($commit in $event.commits) {
+            Write-Host "Checking commit $($commit.id) for build environment changes..."
+            $data = Invoke-RestMethod `
+              -Uri "https://api.github.com/repos/${{ github.repository }}/commits/$($commit.id)" `
+              -Authentication OAuth `
+              -Token $(ConvertTo-SecureString -AsPlainText -Force ${{ secrets.API_TOKEN }})
+            foreach ($file in $data.files) {
+              if ($file.filename.startswith("build_files/build_environment")) {
+                Write-Host "   - changes to build environment found!"
+                Write-Host "::set-output name=changed::true"
+                exit 0
+              }
+            }
+          }
+          Write-Host "::set-output name=changed::false"
+
+      # Make sure that the dependency artifacts are still available and have not expired.
+      - name: Check Build Environment Artifacts
+        id: check-artifacts
+        run: |
+          Write-Host "Searching for matching artifacts...";
+          $artifacts = Invoke-RestMethod `
+            -Uri "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" `
+            -Authentication OAuth `
+            -Token $(ConvertTo-SecureString -AsPlainText -Force ${{ secrets.API_TOKEN }})
+          foreach ($artifact in $artifacts.artifacts) {
+            if ($artifact.name -Eq "${{ env.deps-artifact-name }}") {
+              Write-Host "Found build libraries: $($artifact.archive_download_url)"
+              Write-Host "::set-output name=url::$($artifact.archive_download_url)"
+              Write-Host "::set-output name=found::true"
+              exit 0
+            }
+          }
+          Write-Host "No applicable build libraries found."
+          Write-Host "::set-output name=found::false"
+
+      - name: Determine Build Status
+        id: need-to-build-deps
+        run: |
+          $build = "false"
+          if ("${{ steps.check-build-files.outputs.changed }}" -Eq "true") {
+            $build = "true"
+          } elseif ("${{ steps.check-artifacts.outputs.found }}" -Eq "false") {
+            $build = "true"
+          }
+          Write-Host "::set-output name=build::$build"
+
+      - name: Download Dependency Artifacts
+        if: steps.need-to-build-deps.outputs.build == 'false'
+        run: |
+          $artifacts_uri = "${{ steps.check-artifacts.outputs.url }}"
+          if ([string]::IsNullOrWhiteSpace($artifacts_uri)) {
+            throw "Dependency Artifacts are not available!"
+          }
+          Invoke-WebRequest -Uri $artifacts_uri -OutFile lib.zip `
+            -Authentication OAuth `
+            -Token $(ConvertTo-SecureString -AsPlainText -Force ${{ secrets.API_TOKEN }})
+          Expand-Archive -DestinationPath lib -Path lib.zip
+
+      - name: Setup MSBuild
+        if: steps.need-to-build-deps.outputs.build == 'true' && runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.0.0
+      - name: Prepare Build Environment
+        run: |
+          $runner = "${{ runner.os }}"
+          if ($runner -Eq "Windows") {
+            Write-Host "::set-env name=CMAKE_GENERATOR::Visual Studio 16 2019"
+            if ("${{ matrix.arch }}" -Eq "x86") {
+              Write-Host "::set-env name=CMAKE_GENERATOR_PLATFORM::Win32"
+            } else {
+              Write-Host "::set-env name=CMAKE_GENERATOR_PLATFORM::${{ matrix.arch }}"
+            }
+          } elseif ($runner -Eq "macOS") {
+            brew install autoconf automake libtool yasm nasm
+            brew cask install xquartz
+            brew reinstall gettext
+            brew unlink gettext && brew link gettext --force
+          } else {
+            apt-get install -y autoconf automake libtool yasm nasm tcl
+          }
+
+      - name: Build Dependencies
+        if: steps.need-to-build-deps.outputs.build == 'true'
+        env:
+          download-dir: ${{ github.workspace }}/build_deps/download
+          harvest-dir: ${{ github.workspace }}/lib
+        run: |
+          mkdir lib
+          mkdir build_deps && cd build_deps
+          mkdir -p download/externals
+          if ("${{ runner.os }}" -Eq "Windows") {
+            $Env:Path += ";${{ env.download-dir }}/mingw/mingw64/msys/1.0/bin/"
+            $Env:Path += ";${{ env.download-dir }}/nasm-2.12.01/"
+          }
+          cmake `
+            -DDOWNLOAD_DIR=${{ env.download-dir }} `
+            -DHARVEST_TARGET=${{ env.harvest-dir }} `
+            -DBUILD_MODE=Release `
+            "${{ github.workspace }}/blender/build_files/build_environment"
+          if ("${{ runner.os }}" -Eq "Windows") {
+            Write-Host "Building LLVM..."
+            MSBuild /m "ll.vcxproj" /p:Configuration=Release
+            Write-Host "`n`nBuilding Blender Dependencies..."
+            MSBuild /m "BlenderDependencies.sln" /p:Configuration=Release
+            Write-Host "`n`nHarvesting Dependencies..."
+            cmake --build . --config Release -j 2 --target Harvest_Release_Results
+          } else {
+            Write-Host "`n`nBuilding Blender Dependencies..."
+            cmake --build . --config Release -j 2 --target install
+          }
+          Write-Host "`n`nw00t"
+
+      # Upload dependencies for the blender build job
+      - name: Upload New Dependency Artifacts
+        if: steps.need-to-build-deps.outputs.build == 'true'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.deps-artifact-name }}
+          path: lib/
+
+      - name: Build Blender
+        run: |
+          mkdir build && cd build
+          # Because the Windows path separator is interpreted as an escape character somewhere
+          # deep inside CMake, and I don't feel like debugging that crap.
+          $workspace = "${{ github.workspace }}".Replace('\', '/')
+          cmake `
+            -DLIBDIR="$workspace/lib" `
+            "$workspace/blender"
+          cmake --build . --config Release -j 2
+          cmake --build . --config Release -j 2 --target INSTALL
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.final-artifact-name }}
+          path: build/bin/Release/
