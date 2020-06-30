@@ -84,6 +84,11 @@ else()
 	set(PYTHON_CONFIGURE_EXTRA_ARGS "--with-openssl=${LIBDIR}/ssl")
 	set(PYTHON_CFLAGS "-I${LIBDIR}/sqlite/include -I${LIBDIR}/bzip2/include -I${LIBDIR}/lzma/include -I${LIBDIR}/zlib/include")
 	set(PYTHON_LDFLAGS "-L${LIBDIR}/ffi/lib -L${LIBDIR}/sqlite/lib -L${LIBDIR}/bzip2/lib -L${LIBDIR}/lzma/lib -L${LIBDIR}/zlib/lib")
+	if(APPLE)
+		string(APPEND PYTHON_CFLAGS " -I/usr/local/opt/gettext/include")
+		string(APPEND PYTHON_LDFLAGS " -L/usr/local/opt/gettext/lib")
+	endif()
+
 	set(PYTHON_CONFIGURE_EXTRA_ENV
 		export CFLAGS=${PYTHON_CFLAGS} &&
 		export CPPFLAGS=${PYTHON_CFLAGS} &&

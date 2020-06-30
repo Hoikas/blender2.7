@@ -27,7 +27,7 @@ ExternalProject_Add(external_opencollada
 	DOWNLOAD_DIR ${DOWNLOAD_DIR}
 	URL_HASH MD5=${OPENCOLLADA_HASH}
 	PREFIX ${BUILD_DIR}/opencollada
-	PATCH_COMMAND ${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/opencollada/src/external_opencollada < ${PATCH_DIR}/opencollada.diff
+	PATCH_COMMAND ${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/opencollada/src/external_opencollada < ${PATCH_DIR}/opencollada.diff
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LIBDIR}/opencollada ${DEFAULT_CMAKE_FLAGS} ${OPENCOLLADA_EXTRA_ARGS}
 	INSTALL_DIR ${LIBDIR}/opencollada
 )

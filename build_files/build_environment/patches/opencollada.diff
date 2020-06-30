@@ -1,8 +1,7 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 95abbe2..4f14f30 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -254,11 +254,11 @@ if(USE_STATIC_MSVC_RUNTIME)
+diff -ru CMakeLists.txt CMakeLists.txt
+--- CMakeLists.txt
++++ CMakeLists.txt
+@@ -254,11 +254,11 @@
  endif()
  
  #adding PCRE
@@ -16,10 +15,9 @@ index 95abbe2..4f14f30 100644
  		message("WARNING: Native PCRE not found, taking PCRE from ./Externals")
  		add_definitions(-DPCRE_STATIC)
  		add_subdirectory(${EXTERNAL_LIBRARIES}/pcre)
-diff --git a/DAEValidator/library/include/no_warning_begin b/DAEValidator/library/include/no_warning_begin
-index 7a69c32..defb315 100644
---- a/DAEValidator/library/include/no_warning_begin
-+++ b/DAEValidator/library/include/no_warning_begin
+diff -ru DAEValidator/library/include/no_warning_begin DAEValidator/library/include/no_warning_begin
+--- DAEValidator/library/include/no_warning_begin
++++ DAEValidator/library/include/no_warning_begin
 @@ -2,6 +2,9 @@
  #if defined(_WIN32)
  #	pragma warning(push)
@@ -30,11 +28,10 @@ index 7a69c32..defb315 100644
  #	if defined(_MSC_VER) && defined(_DEBUG)
  #		pragma warning(disable:4548)
  #	endif
-diff --git a/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp b/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
-index 1f9a3ee..d151e9a 100644
---- a/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
-+++ b/GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
-@@ -1553,7 +1553,7 @@ namespace GeneratedSaxParser
+diff -ru GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
+--- GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
++++ GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp
+@@ -1553,7 +1553,7 @@
  #if defined(COLLADABU_OS_WIN) && !defined(__MINGW32__)
          return _isnan( value ) ? true : false;
  #else
@@ -43,10 +40,9 @@ index 1f9a3ee..d151e9a 100644
          return isnan( value );
  #else
          return std::isnan(value);
-diff --git a/DAEValidator/library/src/ArgumentParser.cpp b/DAEValidator/library/src/ArgumentParser.cpp
-index 897e4dcf..98a69ff1 100644
---- a/DAEValidator/library/src/ArgumentParser.cpp
-+++ b/DAEValidator/library/src/ArgumentParser.cpp
+diff -ru DAEValidator/library/src/ArgumentParser.cpp DAEValidator/library/src/ArgumentParser.cpp
+--- DAEValidator/library/src/ArgumentParser.cpp
++++ DAEValidator/library/src/ArgumentParser.cpp
 @@ -6,10 +6,10 @@
  
  using namespace std;
