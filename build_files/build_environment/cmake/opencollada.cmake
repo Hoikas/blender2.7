@@ -18,6 +18,7 @@
 
 if(UNIX)
 	set(OPENCOLLADA_EXTRA_ARGS
+		-DLIBXML2_FOUND=ON
 		-DLIBXML2_INCLUDE_DIR=${LIBDIR}/xml2/include/libxml2
 		-DLIBXML2_LIBRARIES=${LIBDIR}/xml2/lib/libxml2.a)
 endif()

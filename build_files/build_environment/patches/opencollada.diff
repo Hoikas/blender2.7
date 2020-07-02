@@ -1,6 +1,20 @@
 diff -ru CMakeLists.txt CMakeLists.txt
 --- CMakeLists.txt
 +++ CMakeLists.txt
+@@ -217,11 +217,11 @@
+ 		-DGENERATEDSAXPARSER_XMLPARSER_LIBXML
+ 		-DXMLPARSER_LIBXML
+ 	)
+-	find_package(LibXml2)
++	#find_package(LibXml2)
+ 	if (LIBXML2_FOUND)
+ 		message(STATUS "SUCCESSFUL: LibXml2 found")
+ 	else ()  # if xml2 not found building its local copy from ./Externals
+-		if (WIN32)
++		if (1)
+			message("WARNING: Native LibXml2 not found, taking LibXml from ./Externals")
+			add_subdirectory(${EXTERNAL_LIBRARIES}/LibXML)
+			set(LIBXML2_INCLUDE_DIR
 @@ -254,11 +254,11 @@
  endif()
  
