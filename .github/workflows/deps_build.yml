@@ -1,0 +1,70 @@
+name: Dependency Build
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    defaults:
+      run:
+        shell: pwsh
+
+    strategy:
+      fail-fast: false
+      matrix:
+        cfg:
+          - { os: windows-2019, generator: Visual Studio 16 2019, arch: Win32, str: windows-x86 }
+          - { os: windows-2019, generator: Visual Studio 16 2019, arch: x64, str: windows-x64 }
+
+    env:
+      CMAKE_GENERATOR: ${{ matrix.cfg.generator }}
+      CMAKE_GENERATOR_PLATFORM: ${{ matrix.cfg.arch }}
+
+    runs-on: ${{ matrix.cfg.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: blender
+          # Don't touch - the checkout fails otherwise.
+          fetch-depth: 0
+          submodules: false
+
+      - name: Step Python
+        uses: actions/setup-python@v2
+      - name: Setup MSBuild
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v3
+
+      # This is essentially a reimplementation of build_files/build_environment/windows/build_deps.cmd
+      # The difference is that since this is in PowerShell instead of cmd, GHA will fail immediately
+      # on any error. Also, only the Release libs are built, to conserve space.
+      - name: Build Dependencies
+        if: runner.os == 'Windows'
+        env:
+          download-dir: ${{ github.workspace }}/build_deps/download
+          harvest-dir: ${{ github.workspace }}/lib
+        run: |
+          mkdir lib
+          mkdir build_deps && cd build_deps
+          mkdir -p download/externals
+          $Env:Path += ";${{ env.download-dir }}/mingw/mingw64/msys/1.0/bin/"
+          $Env:Path += ";${{ env.download-dir }}/nasm-2.12.01/"
+          cmake `
+            -DDOWNLOAD_DIR=${{ env.download-dir }} `
+            -DHARVEST_TARGET=${{ env.harvest-dir }} `
+            -DBUILD_MODE=Release `
+            "${{ github.workspace }}/blender/build_files/build_environment"
+          Write-Host "Building LLVM..."
+          MSBuild /m "ll.vcxproj" /p:Configuration=Release
+          Write-Host "`n`nBuilding Blender Dependencies..."
+          MSBuild /m "BlenderDependencies.sln" /p:Configuration=Release
+          Write-Host "`n`nHarvesting Dependencies..."
+          cmake --build . --config Release -j 2 --target Harvest_Release_Results
+
+      # Upload dependencies for the blender build job
+      - name: Upload Dependency Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dependencies-${{ matrix.cfg.str }}
+          path: lib/
