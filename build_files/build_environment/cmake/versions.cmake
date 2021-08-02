@@ -34,7 +34,7 @@ set(JPEG_HASH 5b7549d440b86c98a517355c102d155e)
 
 set(BOOST_VERSION 1.70.0)
 set(BOOST_VERSION_NODOTS 1_70_0)
-set(BOOST_URI https://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION_NODOTS}.tar.gz)
+set(BOOST_URI https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION_NODOTS}.tar.gz)
 set(BOOST_HASH 882b48708d211a5f48e60b0124cf5863c1534cd544ecd0664bb534a4b5d506e9)
 
 set(BLOSC_VERSION 1.14.4)
@@ -42,8 +42,8 @@ set(BLOSC_URI https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz)
 set(BLOSC_HASH e80dfc71e4cba03b8d01ed0876547ffe)
 
 set(PTHREADS_VERSION 3.0.0)
-set(PTHREADS_URI http://sourceforge.mirrorservice.org/p/pt/pthreads4w/pthreads4w-code-v${PTHREADS_VERSION}.zip)
-set(PTHREADS_HASH f3bf81bb395840b3446197bcf4ecd653)
+set(PTHREADS_URI https://downloads.sourceforge.net/project/pthreads4w/pthreads4w-code-v${PTHREADS_VERSION}.zip)
+set(PTHREADS_HASH 3b9e417e4474c34542b76ad40529e396ac109fb4)
 
 set(ILMBASE_VERSION 2.3.0)
 if (WIN32)
@@ -143,11 +143,11 @@ set(OSL_VERSION 1.9.9)
 set(OSL_URI https://github.com/imageworks/OpenShadingLanguage/archive/Release-${OSL_VERSION}.tar.gz)
 set(OSL_HASH 44ad511e424965a10fce051a053b0605)
 
-set(PYTHON_VERSION 3.7.7)
+set(PYTHON_VERSION 3.7.11)
 set(PYTHON_SHORT_VERSION 3.7)
 set(PYTHON_SHORT_VERSION_NO_DOTS 37)
 set(PYTHON_URI https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz)
-set(PYTHON_HASH 172c650156f7bea68ce31b2fd01fa766)
+set(PYTHON_HASH b3671d35b61f5422605cedad32f3457a)
 
 set(TBB_VERSION 2018_U5)
 set(TBB_URI https://github.com/01org/tbb/archive/${TBB_VERSION}.tar.gz)

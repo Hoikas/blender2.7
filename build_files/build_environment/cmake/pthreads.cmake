@@ -18,7 +18,7 @@
 
 if(WIN32)
 
-		if(MSVC14) # vs2015 has timespec
+		if(MSVC_VERSION GREATER_EQUAL 1900) # vs2015 has timespec
 			set(PTHREAD_CPPFLAGS "/I. /DHAVE_CONFIG_H /D_TIMESPEC_DEFINED ")
 		else() # everything before doesn't
 			set(PTHREAD_CPPFLAGS "/I. /DHAVE_CONFIG_H ")
@@ -29,7 +29,7 @@ if(WIN32)
 		ExternalProject_Add(external_pthreads
 			URL ${PTHREADS_URI}
 			DOWNLOAD_DIR ${DOWNLOAD_DIR}
-			URL_HASH MD5=${PTHREADS_HASH}
+			URL_HASH SHA1=${PTHREADS_HASH}
 			PREFIX ${BUILD_DIR}/pthreads
 			CONFIGURE_COMMAND echo .
 			BUILD_COMMAND ${PTHREADS_BUILD}
