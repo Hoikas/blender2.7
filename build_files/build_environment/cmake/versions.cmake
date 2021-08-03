@@ -131,9 +131,9 @@ set(CLANG_HASH 4e419bd4e3b55aa06d872320f754bd85)
 set(OPENMP_URI http://releases.llvm.org/${LLVM_VERSION}/openmp-${LLVM_VERSION}.src.tar.xz)
 set(OPENMP_HASH 4826402ae3633c36c51ba4d0e5527d30)
 
-set(OPENIMAGEIO_VERSION 1.8.13)
+set(OPENIMAGEIO_VERSION 1.8.17)
 set(OPENIMAGEIO_URI https://github.com/OpenImageIO/oiio/archive/Release-${OPENIMAGEIO_VERSION}.tar.gz)
-set(OPENIMAGEIO_HASH f5526c3c9878029ee900d84856683f93)
+set(OPENIMAGEIO_HASH 869005749cdbb88605f03b0625ca2085)
 
 set(TIFF_VERSION 4.0.9)
 set(TIFF_URI http://download.osgeo.org/libtiff/tiff-${TIFF_VERSION}.tar.gz)
@@ -291,9 +291,9 @@ set(LZMA_VERSION 5.2.4)
 set(LZMA_URI https://tukaani.org/xz/xz-${LZMA_VERSION}.tar.bz2)
 set(LZMA_HASH 3313fd2a95f43d88e44264e6b015e7d03053e681860b0d5d3f9baca79c57b7bf)
 
-set(SSL_VERSION 1.1.0l)
+set(SSL_VERSION 1.1.1k)
 set(SSL_URI https://www.openssl.org/source/openssl-${SSL_VERSION}.tar.gz)
-set(SSL_HASH 74a2f756c64fd7386a29184dc0344f4831192d61dc2481a93a4c5dd727f41148)
+set(SSL_HASH bad9dc4ae6dcc1855085463099b5dacb0ec6130b)
 
 set(SQLITE_VERSION 3.24.0)
 set(SQLITE_URI https://www.sqlite.org/2018/sqlite-src-3240000.zip)

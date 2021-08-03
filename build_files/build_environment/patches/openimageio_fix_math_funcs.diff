@@ -1,0 +1,14 @@
+--- OpenImageIO/missing_math.h
++++ OpenImageIO/missing_math.h
+@@ -108,9 +108,11 @@ OIIO_NAMESPACE_BEGIN
+ 
+ #ifdef _WIN32
+ // Windows doesn't define these functions from math.h
++#if _MSC_VER < 1900
+ #define hypotf _hypotf
+ #define copysign(x,y) _copysign(x,y)
+ #define copysignf(x,y) float(copysign(x,y))
++#endif
+ 
+ 
+ 

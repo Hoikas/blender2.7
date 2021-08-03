@@ -73,7 +73,8 @@ set(OPENIMAGEIO_EXTRA_ARGS
 	-DBOOST_ROOT=${LIBDIR}/boost
 	-DBOOST_LIBRARYDIR=${LIBDIR}/boost/lib/
 	-DBoost_NO_SYSTEM_PATHS=ON
-	-OIIO_BUILD_CPP11=ON
+	-DBoost_NO_BOOST_CMAKE=ON
+	-DOIIO_BUILD_CPP11=ON
 	-DUSE_OPENGL=OFF
 	-DUSE_TBB=OFF
 	-DUSE_FIELD3D=OFF
@@ -127,7 +128,8 @@ ExternalProject_Add(external_openimageio
 	PREFIX ${BUILD_DIR}/openimageio
 	PATCH_COMMAND
 		${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/src/include < ${PATCH_DIR}/openimageio_gdi.diff &&
-		${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/ < ${PATCH_DIR}/openimageio_static_libs.diff
+		${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/ < ${PATCH_DIR}/openimageio_static_libs.diff &&
+		${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/src/include < ${PATCH_DIR}/openimageio_fix_math_funcs.diff
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LIBDIR}/openimageio ${DEFAULT_CMAKE_FLAGS} ${OPENIMAGEIO_EXTRA_ARGS}
 	INSTALL_DIR ${LIBDIR}/openimageio
 )
