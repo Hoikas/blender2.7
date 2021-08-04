@@ -23,6 +23,8 @@
 
 # Libraries configuration for Windows.
 
+include(SelectLibraryConfigurations)
+
 add_definitions(-DWIN32)
 
 if(NOT MSVC)
@@ -585,22 +587,26 @@ endif()
 if(WITH_CYCLES_OSL)
 	set(CYCLES_OSL ${LIBDIR}/osl CACHE PATH "Path to OpenShadingLanguage installation")
 
-	find_library(OSL_LIB_EXEC NAMES oslexec PATHS ${CYCLES_OSL}/lib)
-	find_library(OSL_LIB_COMP NAMES oslcomp PATHS ${CYCLES_OSL}/lib)
-	find_library(OSL_LIB_QUERY NAMES oslquery PATHS ${CYCLES_OSL}/lib)
-	find_library(OSL_LIB_EXEC_DEBUG NAMES oslexec_d PATHS ${CYCLES_OSL}/lib)
-	find_library(OSL_LIB_COMP_DEBUG NAMES oslcomp_d PATHS ${CYCLES_OSL}/lib)
-	find_library(OSL_LIB_QUERY_DEBUG NAMES oslquery_d PATHS ${CYCLES_OSL}/lib)
-	list(APPEND OSL_LIBRARIES
-		optimized ${OSL_LIB_COMP}
-		optimized ${OSL_LIB_EXEC}
-		optimized ${OSL_LIB_QUERY}
-		optimized ${CYCLES_OSL}/lib/pugixml.lib
-		debug ${OSL_LIB_EXEC_DEBUG}
-		debug ${OSL_LIB_COMP_DEBUG}
-		debug ${OSL_LIB_QUERY_DEBUG}
-		debug ${CYCLES_OSL}/lib/pugixml_d.lib
+	find_library(OSL_LIB_EXEC_LIBRARY_RELEASE NAMES oslexec PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_COMP_LIBRARY_RELEASE NAMES oslcomp PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_QUERY_LIBRARY_RELEASE NAMES oslquery PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_EXEC_LIBRARY_DEBUG NAMES oslexec_d PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_COMP_LIBRARY_DEBUG NAMES oslcomp_d PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_QUERY_LIBRARY_DEBUG NAMES oslquery_d PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_PUGIXML_LIBRARY_RELEASE NAMES pugixml PATHS ${CYCLES_OSL}/lib)
+	find_library(OSL_LIB_PUGIXML_LIBRARY_DEBUG NAMES pugixml_d PATHS ${CYCLES_OSL}/lib)
+
+	select_library_configurations(OSL_LIB_EXEC)
+	select_library_configurations(OSL_LIB_COMP)
+	select_library_configurations(OSL_LIB_QUERY)
+	select_library_configurations(OSL_LIB_PUGIXML)
+	set(OSL_LIBRARIES
+		${OSL_LIB_EXEC_LIBRARIES}
+		${OSL_LIB_COMP_LIBRARIES}
+		${OSL_LIB_QUERY_LIBRARIES}
+		${OSL_LIB_PUGIXML_LIBRARIES}
 	)
+
 	find_path(OSL_INCLUDE_DIR OSL/oslclosure.h PATHS ${CYCLES_OSL}/include)
 	find_program(OSL_COMPILER NAMES oslc PATHS ${CYCLES_OSL}/bin)
 
