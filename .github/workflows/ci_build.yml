@@ -1,0 +1,87 @@
+name: CI Build
+on: [push, pull_request]
+
+jobs:
+  build:
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      fail-fast: false
+      matrix:
+        cfg:
+          - {
+              os: windows-2019,
+              generator: Visual Studio 16 2019,
+              arch: Win32,
+              str: windows-x86,
+              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210803/dependencies-windows-x86.zip",
+              deps-output: lib/windows_vc16,
+              cuda: OFF # CUDA doesn't seem to work on x86. No loss, we could probably get away with junking x86 anyway.
+            }
+          - {
+              os: windows-2019,
+              generator: Visual Studio 16 2019,
+              arch: x64,
+              str: windows-x64,
+              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210803/dependencies-windows-x64.zip",
+              deps-output: lib/win64_vc16,
+              cuda: ON
+            }
+
+    runs-on: ${{ matrix.cfg.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: blender
+          submodules: true
+
+      - name: Prepare Dependencies
+        run: |
+          curl --location "${{ matrix.cfg.deps-url }}" --output deps.zip
+          mkdir -p "${{ github.workspace}}/${{ matrix.cfg.deps-output }}"
+          7z x deps.zip -o"${{ github.workspace}}/${{ matrix.cfg.deps-output }}" -bsp1
+          rm deps.zip
+
+      - name: Install CUDA
+        if: matrix.cfg.cuda == 'ON'
+        uses: Jimver/cuda-toolkit@v0.2.4
+        with:
+          cuda: "10.1.243" # Blender 2.79 uses old things not supported in CUDA 11
+          method: network
+          sub-packages: '["nvcc", "nvrtc", "nvrtc_dev"]'
+
+      - name: Configure Blender
+        run: |
+          cmake \
+            -G "${{ matrix.cfg.generator }}" \
+            -A "${{ matrix.cfg.arch }}" \
+            -C "blender/build_files/cmake/config/blender_release.cmake" \
+            -B build \
+            -S blender \
+            -DCPACK_BINARY_NSIS=OFF \
+            -DCPACK_BINARY_WIX=ON \
+            -DCPACK_BINARY_ZIP=ON \
+            -DWITH_CYCLES_CUDA_BINARIES=${{ matrix.cfg.cuda }}
+
+      - name: Build Blender
+        run: |
+          cd build
+          cmake --build . --target INSTALL --config Release -j 2
+
+      - name: Package Blender
+        run: |
+          mkdir -p build/package
+          cd build
+          cpack \
+            -B package \
+            -C Release
+          rm -r package/_CPack_Packages
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: blender-${{ matrix.cfg.str }}
+          path: build/package/
