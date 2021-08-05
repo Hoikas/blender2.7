@@ -1,20 +1,16 @@
 [submodule "release/scripts/addons"]
 	path = release/scripts/addons
-	url = https://git.blender.org/blender-addons.git
-	ignore = all
+	url = https://github.com/Hoikas/blender-addons.git
 	branch = blender2.7
 [submodule "release/scripts/addons_contrib"]
 	path = release/scripts/addons_contrib
-	url = https://git.blender.org/blender-addons-contrib.git
-	ignore = all
+	url = https://github.com/Hoikas/blender-addons-contrib.git
 	branch = blender2.7
 [submodule "release/datafiles/locale"]
 	path = release/datafiles/locale
-	url = https://git.blender.org/blender-translations.git
-	ignore = all
+	url = https://github.com/Hoikas/blender-translations.git
 	branch = blender2.7
 [submodule "source/tools"]
 	path = source/tools
-	url = https://git.blender.org/blender-dev-tools.git
-	ignore = all
+	url = https://github.com/Hoikas/blender-dev-tools.git
 	branch = blender-v2.79-release
