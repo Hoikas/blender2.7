@@ -50,7 +50,7 @@ if(WIN32)
 	)
 	set(BOOST_BUILD_COMMAND b2)
 	#--user-config=user-config.jam
-	set(BOOST_BUILD_OPTIONS runtime-link=static )
+	set(BOOST_BUILD_OPTIONS )
 	#set(BOOST_WITH_PYTHON --with-python)
 	set(BOOST_HARVEST_CMD 	${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/lib/ ${HARVEST_TARGET}/boost/lib/ )
 	if(BUILD_MODE STREQUAL Release)

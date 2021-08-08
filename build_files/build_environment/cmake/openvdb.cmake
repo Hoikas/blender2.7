@@ -24,7 +24,6 @@ set(OPENVDB_EXTRA_ARGS
 	-DBoost_COMPILER:STRING=${BOOST_COMPILER_STRING}
 	-DBoost_USE_MULTITHREADED=ON
 	-DBoost_USE_STATIC_LIBS=ON
-	-DBoost_USE_STATIC_RUNTIME=ON
 	-DBOOST_ROOT=${LIBDIR}/boost
 	-DBoost_NO_SYSTEM_PATHS=ON
 	-DBoost_NO_BOOST_CMAKE=ON
@@ -90,13 +89,15 @@ if(WIN32)
 	if(BUILD_MODE STREQUAL Release)
 		ExternalProject_Add_Step(openvdb after_install
 			COMMAND ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/openvdb/include ${HARVEST_TARGET}/openvdb/include
-			COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR}/openvdb/lib/libopenvdb.lib ${HARVEST_TARGET}/openvdb/lib/openvdb.lib
+			COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR}/openvdb/lib/openvdb.lib ${HARVEST_TARGET}/openvdb/lib/openvdb.lib
+			COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR}/openvdb/bin/openvdb.dll ${HARVEST_TARGET}/openvdb/lib/openvdb.dll
 			DEPENDEES install
 		)
 	endif()
 	if(BUILD_MODE STREQUAL Debug)
 		ExternalProject_Add_Step(openvdb after_install
-			COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR}/openvdb/lib/libopenvdb.lib ${HARVEST_TARGET}/openvdb/lib/openvdb_d.lib
+			COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR}/openvdb/lib/openvdb.lib ${HARVEST_TARGET}/openvdb/lib/openvdb_d.lib
+			COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR}/openvdb/bin/openvdb.dll ${HARVEST_TARGET}/openvdb/lib/openvdb_d.dll
 			DEPENDEES install
 		)
 	endif()
