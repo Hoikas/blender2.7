@@ -80,17 +80,33 @@ if(APPLE)
 endif()
 
 if(WIN32)
+	find_package(VCRedist REQUIRED)
+
 	set(CPACK_PACKAGE_INSTALL_DIRECTORY "Blender Foundation/Blender")
 	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Blender Foundation/Blender")
 
 	set(CPACK_NSIS_MUI_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winblender.ico)
 	set(CPACK_NSIS_COMPRESSOR "/SOLID lzma")
 
+	# NSIS install the MSVCRT
+	set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS
+		"ExecWait \"$INSTDIR\${VCRedist_NAME} /q /norestart\""
+	)
+
 	set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/release/text/GPL-license.txt)
 	set(CPACK_WIX_PRODUCT_ICON ${CMAKE_SOURCE_DIR}/release/windows/icons/winblender.ico)
 	set(CPACK_WIX_UPGRADE_GUID "B767E4FD-7DE7-4094-B051-3AE62E13A17A")
 
-	set(CPACK_WIX_TEMPLATE ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX.template)
+	# WiX uses MergeModules for the MSVCRT, so it's not quite as simple as in NSIS. I don't
+	# really understand how the whole CPACK_WIX_PATCH_FILE thing works (poor system and docs),
+	# so it's better to just fill this into the template.
+	configure_file(
+		"${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX.template"
+		"${CMAKE_CURRENT_BINARY_DIR}/WIX.template"
+		@ONLY
+	)
+
+	set(CPACK_WIX_TEMPLATE "${CMAKE_CURRENT_BINARY_DIR}/WIX.template")
 	set(CPACK_WIX_UI_BANNER ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX_UI_BANNER.bmp)
 	set(CPACK_WIX_UI_DIALOG ${CMAKE_SOURCE_DIR}/release/windows/installer_wix/WIX_UI_DIALOG.bmp)
 

@@ -16,7 +16,7 @@ jobs:
               generator: Visual Studio 16 2019,
               arch: Win32,
               str: windows-x86,
-              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210803/dependencies-windows-x86.zip",
+              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210807/dependencies-windows-x86.zip",
               deps-output: lib/windows_vc16,
               cuda: OFF # CUDA doesn't seem to work on x86. No loss, we could probably get away with junking x86 anyway.
             }
@@ -25,7 +25,7 @@ jobs:
               generator: Visual Studio 16 2019,
               arch: x64,
               str: windows-x64,
-              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210803/dependencies-windows-x64.zip",
+              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210807/dependencies-windows-x64.zip",
               deps-output: lib/win64_vc16,
               cuda: ON
             }

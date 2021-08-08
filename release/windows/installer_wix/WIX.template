@@ -50,6 +50,18 @@
                       ExeCommand=" -r"
                       Return="ignore" />
 
+        <!-- VCRedist junk -->
+        <DirectoryRef Id="TARGETDIR">
+            <Merge Id="VCRedist_CRT" SourceFile="@VCRedist_CRT_MERGE_MODULE@" DiskId="1" Language="0" />
+            <Merge Id="VCRedist_CXXAMP" SourceFile="@VCRedist_CXXAMP_MERGE_MODULE@" DiskId="1" Language="0" />
+            <Merge Id="VCRedist_OpenMP" SourceFile="@VCRedist_OPENMP_MERGE_MODULE@" DiskId="1" Language="0" />
+        </DirectoryRef>
+        <Feature Id="VCRedist" Title="Visual C++ Runtime" AllowAdvertise="no" Display="hidden" Level="1">
+            <MergeRef Id="VCRedist_CRT" />
+            <MergeRef Id="VCRedist_CXXAMP" />
+            <MergeRef Id="VCRedist_OpenMP" />
+        </Feature>
+
         <InstallExecuteSequence>
 			<Custom Action="RegisterBlender" After="InstallFiles" />
         </InstallExecuteSequence>

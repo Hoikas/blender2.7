@@ -828,6 +828,14 @@ elseif(WIN32)
 		)
 	endif()
 
+	if(WITH_OPENVDB)
+		install(
+			FILES
+				${LIBDIR}/openvdb/lib/openvdb.dll
+			DESTINATION "."
+		)
+	endif()
+
 	if(NOT CMAKE_CL_64)
 		install(
 			FILES ${LIBDIR}/thumbhandler/lib/BlendThumb.dll
