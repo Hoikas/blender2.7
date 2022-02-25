@@ -32,7 +32,14 @@ if NOT "%1" == "" (
     set CMAKE_BUILDER=Visual Studio 16 2019
     goto par2
   )
-  
+	if "%1" == "2022" (
+    echo "Building for VS2022"
+    set VSVER=17.0
+    set VSVER_SHORT=17
+    set BuildDir=VS17
+    set CMAKE_BUILDER=Visual Studio 17 2022
+    goto par2
+  )
 )
 :usage
 

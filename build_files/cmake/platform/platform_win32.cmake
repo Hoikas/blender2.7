@@ -179,8 +179,11 @@ if(NOT DEFINED LIBDIR)
 		message(STATUS "32 bit compiler detected.")
 		set(LIBDIR_BASE "windows")
 	endif()
-	# Can be 1910..1912
-	if(MSVC_VERSION GREATER 1919)
+	# Can be 1910..1939
+	if(MSVC_VERSION GREATER 1929)
+		message(STATUS "Visual Studio 2022 detected.")
+		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc17)
+	elseif(MSVC_VERSION GREATER 1919)
 		message(STATUS "Visual Studio 2019 detected.")
 		set(LIBDIR ${CMAKE_SOURCE_DIR}/../lib/${LIBDIR_BASE}_vc16)
 	elseif(MSVC_VERSION GREATER 1909)
