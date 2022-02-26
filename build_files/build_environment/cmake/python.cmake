@@ -39,6 +39,17 @@ if(WIN32)
 	message("Python DOWNLOADS_EXTERNALS_FOLDER = ${DOWNLOADS_EXTERNALS_FOLDER}")
 	message("Python DOWNLOADS_EXTERNALS_FOLDER_DOS = ${DOWNLOADS_EXTERNALS_FOLDER_DOS}")
 
+	# Build common args
+	set(PYTHON_MSBUILD_ARGS
+		/p:Configuration=${BUILD_MODE}
+		/p:Platform=${CMAKE_GENERATOR_PLATFORM}
+		/p:PlatformToolset=v${MSVC_TOOLSET_VERSION}
+		/p:IncludeExternals=true
+		/p:IncludeCTypes=true
+		/p:IncludeSSL=true
+		/p:IncludeTkinter=false
+	)
+
 	ExternalProject_Add(external_python
 		URL ${PYTHON_URI}
 		DOWNLOAD_DIR ${DOWNLOAD_DIR}
@@ -49,7 +60,12 @@ if(WIN32)
 			mklink /D "${PYTHON_EXTERNALS_FOLDER_DOS}" "${DOWNLOADS_EXTERNALS_FOLDER_DOS}" &&
 			${PATCH_CMD} --verbose -p1 -d ${BUILD_DIR}/python/src/external_python < ${PATCH_DIR}/python_win11_sdk.patch
 		CONFIGURE_COMMAND ""
-		BUILD_COMMAND cd ${BUILD_DIR}/python/src/external_python/pcbuild/ && set IncludeTkinter=false && call build.bat -e -p ${PYTHON_ARCH} -c ${BUILD_MODE}
+		BUILD_COMMAND
+			cd ${BUILD_DIR}/python/src/external_python/pcbuild &&
+			# Reimplemented build.bat here because of stupid errors.
+			call get_externals.bat &&
+			MSBuild pythoncore.vcxproj ${PYTHON_MSBUILD_ARGS} /t:KillPython /p:KillPython=true &&
+			MSBuild pcbuild.proj ${PYTHON_MSBUILD_ARGS}
 		INSTALL_COMMAND COMMAND
 			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.dll ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.dll &&
 			${CMAKE_COMMAND} -E copy ${PYTHON_OUTPUTDIR}python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.pdb ${LIBDIR}/python/lib/python${PYTHON_SHORT_VERSION_NO_DOTS}${PYTHON_POSTFIX}.pdb &&
