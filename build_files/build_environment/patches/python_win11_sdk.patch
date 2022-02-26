@@ -1,0 +1,33 @@
+diff --git a/PC/python_ver_rc.h b/PC/python_ver_rc.h
+index bc4ab34c71..1aa0928734 100644
+--- a/PC/python_ver_rc.h
++++ b/PC/python_ver_rc.h
+@@ -1,6 +1,12 @@
+ // Resource script for Python core DLL.
+ // Currently only holds version information.
+ //
++// Temporarily workaround bug in Windows SDK 10.0.22000.0 winnt.h
++#ifdef RC_INVOKED
++#   ifndef SYSTEM_CACHE_ALIGNMENT_SIZE
++#       define SYSTEM_CACHE_ALIGNMENT_SIZE 64
++#   endif
++#endif
+ #include "winver.h"
+
+ #define PYTHON_COMPANY   "Python Software Foundation"
+diff --git a/PC/sqlite3.rc b/PC/sqlite3.rc
+index 84bd87d9d5..d38c70790b 100644
+--- a/PC/sqlite3.rc
++++ b/PC/sqlite3.rc
+@@ -1,5 +1,10 @@
+ // Resource script for Sqlite DLL.
+-
++// Temporarily workaround bug in Windows SDK 10.0.22000.0 winnt.h
++#ifdef RC_INVOKED
++#   ifndef SYSTEM_CACHE_ALIGNMENT_SIZE
++#       define SYSTEM_CACHE_ALIGNMENT_SIZE 64
++#   endif
++#endif
+ #include <winver.h>
+
+ // Include the manifest file that indicates we support all
