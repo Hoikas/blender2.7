@@ -143,11 +143,11 @@ set(OSL_VERSION 1.9.9)
 set(OSL_URI https://github.com/imageworks/OpenShadingLanguage/archive/Release-${OSL_VERSION}.tar.gz)
 set(OSL_HASH 44ad511e424965a10fce051a053b0605)
 
-set(PYTHON_VERSION 3.7.12)
+set(PYTHON_VERSION 3.7.13)
 set(PYTHON_SHORT_VERSION 3.7)
 set(PYTHON_SHORT_VERSION_NO_DOTS 37)
 set(PYTHON_URI https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz)
-set(PYTHON_HASH 352ea082224121a8b7bc4d6d06e5de39)
+set(PYTHON_HASH  10822726f75fd7efe05a94fbd6ac2258)
 
 set(TBB_VERSION 2018_U5)
 set(TBB_URI https://github.com/01org/tbb/archive/${TBB_VERSION}.tar.gz)
