@@ -126,7 +126,7 @@ remove_cc_flag("/MDd" "/MD" "/MT" "/MTd")
 
 # Insert Hoikas's diatribe about installing the MSVCRT DLLs manually here. In short, don't do it.
 if(MSVC)
-	find_package(VCRedist REQUIRED)
+	find_package(VCRedist REQUIRED COMPONENTS Executable)
 
 	# Meh, the NSIS installer needs it, and it's good to provide it for the end user.
 	install(PROGRAMS

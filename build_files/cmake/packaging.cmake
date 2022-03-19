@@ -80,7 +80,12 @@ if(APPLE)
 endif()
 
 if(WIN32)
-	find_package(VCRedist REQUIRED)
+	if(CPACK_BINARY_NSIS)
+		find_package(VCRedist REQUIRED COMPONENTS Executable)
+	endif()
+	if(CPACK_BINARY_WIX)
+		find_package(VCRedist REQUIRED COMPONENTS MergeModules)
+	endif()
 
 	set(CPACK_PACKAGE_INSTALL_DIRECTORY "Blender Foundation/Blender")
 	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Blender Foundation/Blender")

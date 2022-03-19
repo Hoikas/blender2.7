@@ -62,7 +62,7 @@ jobs:
             -B build \
             -S blender \
             -DCPACK_BINARY_NSIS=OFF \
-            -DCPACK_BINARY_WIX=ON \
+            -DCPACK_BINARY_WIX=OFF \
             -DCPACK_BINARY_ZIP=ON \
             -DWITH_CYCLES_CUDA_BINARIES=${{ matrix.cfg.cuda }}
 
