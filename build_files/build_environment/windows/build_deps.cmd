@@ -43,7 +43,7 @@ if NOT "%1" == "" (
 )
 :usage
 
-Echo Usage build_deps 2013/2015/2017/2019 x64/x86
+Echo Usage build_deps 2013/2015/2017/2019/2022 x64/x86
 goto exit
 :par2
 if NOT "%2" == "" (

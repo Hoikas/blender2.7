@@ -32,10 +32,10 @@ set(JPEG_VERSION 1.5.3)
 set(JPEG_URI https://github.com/libjpeg-turbo/libjpeg-turbo/archive/${JPEG_VERSION}.tar.gz)
 set(JPEG_HASH 5b7549d440b86c98a517355c102d155e)
 
-set(BOOST_VERSION 1.70.0)
-set(BOOST_VERSION_NODOTS 1_70_0)
+set(BOOST_VERSION 1.78.0)
+set(BOOST_VERSION_NODOTS 1_78_0)
 set(BOOST_URI https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION_NODOTS}.tar.gz)
-set(BOOST_HASH 882b48708d211a5f48e60b0124cf5863c1534cd544ecd0664bb534a4b5d506e9)
+set(BOOST_HASH 94ced8b72956591c4775ae2207a9763d3600b30d9d7446562c552f0a14a63be7)
 
 set(BLOSC_VERSION 1.14.4)
 set(BLOSC_URI https://github.com/Blosc/c-blosc/archive/v${BLOSC_VERSION}.tar.gz)
@@ -188,9 +188,9 @@ set(FLAC_VERSION 1.3.2)
 set(FLAC_URI http://downloads.xiph.org/releases/flac/flac-${FLAC_VERSION}.tar.xz)
 set(FLAC_HASH 91cfc3ed61dc40f47f050a109b08610667d73477af6ef36dcad31c31a4a8d53f)
 
-set(VPX_VERSION 1.7.0)
+set(VPX_VERSION 1.11.0)
 set(VPX_URI https://github.com/webmproject/libvpx/archive/v${VPX_VERSION}/libvpx-v${VPX_VERSION}.tar.gz)
-set(VPX_HASH 1fec931eb5c94279ad219a5b6e0202358e94a93a90cfb1603578c326abfc1238)
+set(VPX_HASH 965e51c91ad9851e2337aebcc0f517440c637c506f3a03948062e3d5ea129a83)
 
 set(X264_URI http://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20180811-2245-stable.tar.bz2)
 set(X264_HASH ae8a868a0e236a348b35d79f3ee80294b169d1195408b689f9851383661ed7aa)
@@ -256,7 +256,7 @@ set(XML2_HASH ae249165c173b1ff386ee8ad676815f5)
 
 set(TINYXML_VERSION 2_6_2)
 set(TINYXML_VERSION_DOTS 2.6.2)
-set(TINYXML_URI https://nchc.dl.sourceforge.net/project/tinyxml/tinyxml/${TINYXML_VERSION_DOTS}/tinyxml_${TINYXML_VERSION}.tar.gz)
+set(TINYXML_URI https://master.dl.sourceforge.net/project/tinyxml/tinyxml/${TINYXML_VERSION_DOTS}/tinyxml_${TINYXML_VERSION}.tar.gz)
 set(TINYXML_HASH c1b864c96804a10526540c664ade67f0)
 
 set(YAMLCPP_VERSION 0.6.3)
@@ -264,7 +264,7 @@ set(YAMLCPP_URI https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-${YAMLCPP_VE
 set(YAMLCPP_HASH b45bf1089a382e81f6b661062c10d0c2)
 
 set(LCMS_VERSION 2.9)
-set(LCMS_URI https://nchc.dl.sourceforge.net/project/lcms/lcms/${LCMS_VERSION}/lcms2-${LCMS_VERSION}.tar.gz)
+set(LCMS_URI https://master.dl.sourceforge.net/project/lcms/lcms/${LCMS_VERSION}/lcms2-${LCMS_VERSION}.tar.gz)
 set(LCMS_HASH 8de1b7724f578d2995c8fdfa35c3ad0e)
 
 set(PUGIXML_VERSION 1.9)

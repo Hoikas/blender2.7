@@ -38,6 +38,9 @@ if(WIN32)
 	elseif(MSVC_TOOLSET_VERSION EQUAL 142)
 		set(BOOST_TOOLSET toolset=msvc-14.2)
 		set(BOOST_COMPILER_STRING -vc142)
+	elseif(MSVC_TOOLSET_VERSION EQUAL 143)
+		set(BOOST_TOOLSET toolset=msvc-14.3)
+		set(BOOST_COMPILER_STRING -vc143)
 	endif()
 	set(JAM_FILE ${BUILD_DIR}/boost/src/external_boost/user-config.jam)
 	set(semi_path "${PATCH_DIR}/semi.txt")
@@ -54,7 +57,7 @@ if(WIN32)
 	#set(BOOST_WITH_PYTHON --with-python)
 	set(BOOST_HARVEST_CMD 	${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/lib/ ${HARVEST_TARGET}/boost/lib/ )
 	if(BUILD_MODE STREQUAL Release)
-		set(BOOST_HARVEST_CMD ${BOOST_HARVEST_CMD} && ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/include/boost-1_70/ ${HARVEST_TARGET}/boost/include/)
+		set(BOOST_HARVEST_CMD ${BOOST_HARVEST_CMD} && ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/include/boost-1_78/ ${HARVEST_TARGET}/boost/include/)
 	endif()
 
 elseif(APPLE)
@@ -98,7 +101,6 @@ ExternalProject_Add(external_boost
 	URL_HASH SHA256=${BOOST_HASH}
 	PREFIX ${BUILD_DIR}/boost
 	UPDATE_COMMAND	""
-	PATCH_COMMAND ${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/boost/src/external_boost < ${PATCH_DIR}/boost.diff
 	CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
 	BUILD_COMMAND ${BOOST_BUILD_COMMAND} ${BOOST_BUILD_OPTIONS} -j${MAKE_THREADS} architecture=x86 address-model=${BOOST_ADDRESS_MODEL} link=static threading=multi ${BOOST_OPTIONS}	--prefix=${LIBDIR}/boost install
 	BUILD_IN_SOURCE 1

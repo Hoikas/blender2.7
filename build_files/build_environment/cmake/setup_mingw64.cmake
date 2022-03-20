@@ -37,16 +37,13 @@ message("Checking for mingw64")
 # download ming64
 if(NOT EXISTS "${DOWNLOAD_DIR}/x86_64-4.9.4-release-win32-seh-rt_v5-rev0.7z")
 	message("Downloading mingw64")
-	file(DOWNLOAD "https://nchc.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/4.9.4/threads-win32/seh/x86_64-4.9.4-release-win32-seh-rt_v5-rev0.7z" "${DOWNLOAD_DIR}/x86_64-4.9.4-release-win32-seh-rt_v5-rev0.7z")
+	file(DOWNLOAD "https://master.dl.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/4.9.4/threads-win32/seh/x86_64-4.9.4-release-win32-seh-rt_v5-rev0.7z" "${DOWNLOAD_DIR}/x86_64-4.9.4-release-win32-seh-rt_v5-rev0.7z")
 endif()
 
 # make mingw root directory
-if(NOT EXISTS "${DOWNLOAD_DIR}/mingw")
-	execute_process(
-		COMMAND ${CMAKE_COMMAND} -E make_directory ${DOWNLOAD_DIR}/mingw
-		WORKING_DIRECTORY ${DOWNLOAD_DIR}
-	)
-endif()
+execute_process(
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${DOWNLOAD_DIR}/mingw/mingw64/bin
+)
 
 # extract mingw64
 if((NOT EXISTS "${DOWNLOAD_DIR}/mingw/mingw64/ming64sh.cmd") AND (EXISTS "${DOWNLOAD_DIR}/x86_64-4.9.4-release-win32-seh-rt_v5-rev0.7z"))
@@ -60,7 +57,7 @@ endif()
 message("Checking for pkg-config")
 if(NOT EXISTS "${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip")
 	message("Downloading pkg-config")
-	file(DOWNLOAD "https://nchc.dl.sourceforge.net/project/pkgconfiglite/0.28-1/pkg-config-lite-0.28-1_bin-win32.zip" "${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip")
+	file(DOWNLOAD "https://master.dl.sourceforge.net/project/pkgconfiglite/0.28-1/pkg-config-lite-0.28-1_bin-win32.zip" "${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip")
 endif()
 
 # extract pkgconfig
@@ -100,7 +97,7 @@ SET(NASM_PATH ${DOWNLOAD_DIR}/mingw/mingw64/bin/nasm.exe)
 message("Checking for mingwGet")
 if(NOT EXISTS "${DOWNLOAD_DIR}/mingw-get-0.6.2-mingw32-beta-20131004-1-bin.zip")
 	message("Downloading mingw-get")
-	file(DOWNLOAD "https://nchc.dl.sourceforge.net/project/mingw/Installer/mingw-get/mingw-get-0.6.2-beta-20131004-1/mingw-get-0.6.2-mingw32-beta-20131004-1-bin.zip" "${DOWNLOAD_DIR}/mingw-get-0.6.2-mingw32-beta-20131004-1-bin.zip")
+	file(DOWNLOAD "https://master.dl.sourceforge.net/project/mingw/Installer/mingw-get/mingw-get-0.6.2-beta-20131004-1/mingw-get-0.6.2-mingw32-beta-20131004-1-bin.zip" "${DOWNLOAD_DIR}/mingw-get-0.6.2-mingw32-beta-20131004-1-bin.zip")
 endif()
 
 # extract mingw_get
@@ -132,7 +129,7 @@ message("Checking for CoreUtils")
 # download old core_utils for pr.exe (ffmpeg needs it to build)
 if(NOT EXISTS "${DOWNLOAD_DIR}/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2")
 	message("Downloading CoreUtils 5.97")
-	file(DOWNLOAD "https://nchc.dl.sourceforge.net/project/mingw/MSYS/Base/msys-core/_obsolete/coreutils-5.97-MSYS-1.0.11-2/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2" "${DOWNLOAD_DIR}/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2")
+	file(DOWNLOAD "https://master.dl.sourceforge.net/project/mingw/MSYS/Base/msys-core/_obsolete/coreutils-5.97-MSYS-1.0.11-2/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2" "${DOWNLOAD_DIR}/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2")
 endif()
 
 if((EXISTS "${DOWNLOAD_DIR}/coreutils-5.97-MSYS-1.0.11-snapshot.tar.bz2") AND (NOT EXISTS "${DOWNLOAD_DIR}/mingw/mingw64/msys/1.0/bin/pr.exe"))
