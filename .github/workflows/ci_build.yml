@@ -12,21 +12,21 @@ jobs:
       matrix:
         cfg:
           - {
-              os: windows-2019,
-              generator: Visual Studio 16 2019,
+              os: windows-2022,
+              generator: Visual Studio 17 2022,
               arch: Win32,
-              str: windows-x86,
-              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210807/dependencies-windows-x86.zip",
-              deps-output: lib/windows_vc16,
+              str: windows-x86-v143,
+              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20220320/dependencies-windows-x86-v143.zip",
+              deps-output: lib/windows_vc17,
               cuda: OFF # CUDA doesn't seem to work on x86. No loss, we could probably get away with junking x86 anyway.
             }
           - {
-              os: windows-2019,
-              generator: Visual Studio 16 2019,
+              os: windows-2022,
+              generator: Visual Studio 17 2022,
               arch: x64,
-              str: windows-x64,
-              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20210807/dependencies-windows-x64.zip",
-              deps-output: lib/win64_vc16,
+              str: windows-x64-v143,
+              deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20220320/dependencies-windows-x64-v143.zip",
+              deps-output: lib/win64_vc17,
               cuda: ON
             }
 
