@@ -64,9 +64,13 @@ jobs:
           Write-Host "`n`nHarvesting Dependencies..."
           cmake --build . --config Release -j 2 --target Harvest_Release_Results
 
+      # Generate the zip manually due to performance.
+      - name: Compress Libraries
+        run: 7z a -t7z libs.7z lib\
+
       # Upload dependencies for the blender build job
       - name: Upload Dependency Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: dependencies-${{ matrix.cfg.str }}
-          path: lib/
+          path: libs.7z
