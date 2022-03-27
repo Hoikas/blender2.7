@@ -42,6 +42,7 @@ ExternalProject_Add(external_vpx
 			--enable-static
 			--disable-install-bins
 			--disable-install-srcs
+			--disable-mmx # Seems to explode on the GHA windows-2022 image for some reason.
 			--disable-sse4_1
 			--disable-sse3
 			--disable-ssse3
