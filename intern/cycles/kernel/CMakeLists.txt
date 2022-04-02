@@ -390,6 +390,9 @@ if(WITH_CYCLES_CUDA_BINARIES)
 			-I ${CMAKE_CURRENT_SOURCE_DIR}/kernels/cuda
 			--use_fast_math
 			-o ${CMAKE_CURRENT_BINARY_DIR}/${cuda_cubin})
+		if(MSVC AND MSVC_TOOLSET_VERSION GREATER 142)
+			set(cuda_flags ${cuda_flags} --allow-unsupported-compiler)
+		endif()
 
 		if(${experimental})
 			set(cuda_flags ${cuda_flags} -D __KERNEL_EXPERIMENTAL__)

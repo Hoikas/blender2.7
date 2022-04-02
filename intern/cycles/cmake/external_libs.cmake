@@ -38,9 +38,6 @@ endif()
 # CUDA
 
 if(WITH_CYCLES_CUDA_BINARIES OR NOT WITH_CUDA_DYNLOAD)
-	if(MSVC AND MSVC_TOOLSET_VERSION GREATER 142)
-		set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -allow-unsupported-compiler")
-	endif()
 	find_package(CUDA) # Try to auto locate CUDA toolkit
 	if(CUDA_FOUND)
 		message(STATUS "CUDA nvcc = ${CUDA_NVCC_EXECUTABLE}")
