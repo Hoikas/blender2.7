@@ -49,3 +49,19 @@ diff -Naur external_opencolorio/CMakeLists.txt external_opencolorio.patched/CMak
      if(YAML_CPP_FOUND)
          if(YAML_CPP_VERSION VERSION_GREATER "0.5.0")
              # Need to also get the boost headers here, as yaml-cpp 0.5.0+ requires them.
+diff a/src/core/Platform.h b/src/core/Platform.h
+--- a/src/core/Platform.h
++++ b/src/core/Platform.h
+@@ -108,9 +108,12 @@ typedef __int64 FilePos;
+ #define fseeko _fseeki64
+ #define ftello _ftelli64
+
++// This seems to be an intrinsic as of MSVC 17.2
++#if _MSC_VER < 1932
+ inline double log2(double x) {
+     return log(x) * 1.4426950408889634;
+ }
++#endif
+
+ #else
+ typedef off_t FilePos;
