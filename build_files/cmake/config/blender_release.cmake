@@ -11,7 +11,7 @@ set(WITH_BULLET              ON  CACHE BOOL "" FORCE)
 set(WITH_CODEC_AVI           ON  CACHE BOOL "" FORCE)
 set(WITH_CODEC_FFMPEG        ON  CACHE BOOL "" FORCE)
 set(WITH_CODEC_SNDFILE       ON  CACHE BOOL "" FORCE)
-set(WITH_CYCLES              OFF CACHE BOOL "" FORCE) # Temporarily disabled due to LLVM linker errors
+set(WITH_CYCLES              ON  CACHE BOOL "" FORCE)
 set(WITH_CYCLES_OSL          ON  CACHE BOOL "" FORCE)
 set(WITH_FFTW3               ON  CACHE BOOL "" FORCE)
 set(WITH_LIBMV               ON  CACHE BOOL "" FORCE)
