@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <boost/locale.hpp>
+#include <iostream>
 
 #include "boost_locale_wrapper.h"
 
