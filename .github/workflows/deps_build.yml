@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: blender
           # Don't touch - the checkout fails otherwise.
@@ -31,12 +31,12 @@ jobs:
           submodules: false
 
       - name: Step Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
       - name: Setup MSBuild
         if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v2
       - name: Setup Ninja
-        uses: seanmiddleditch/gha-setup-ninja@v3
+        uses: seanmiddleditch/gha-setup-ninja@v6
 
       # This is essentially a reimplementation of build_files/build_environment/windows/build_deps.cmd
       # The difference is that since this is in PowerShell instead of cmd, GHA will fail immediately
@@ -70,7 +70,7 @@ jobs:
 
       # Upload dependencies for the blender build job
       - name: Upload Dependency Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: dependencies-${{ matrix.cfg.str }}
           path: libs.7z

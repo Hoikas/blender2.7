@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.cfg.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: blender
           submodules: true
@@ -47,7 +47,7 @@ jobs:
 
       - name: Install CUDA
         if: matrix.cfg.cuda == 'ON'
-        uses: Jimver/cuda-toolkit@v0.2.4
+        uses: Jimver/cuda-toolkit@v0.2.21
         with:
           cuda: "10.1.243" # Blender 2.79 uses old things not supported in CUDA 11
           method: network
@@ -81,7 +81,7 @@ jobs:
           rm -r package/_CPack_Packages
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: blender-${{ matrix.cfg.str }}
           path: build/package/
