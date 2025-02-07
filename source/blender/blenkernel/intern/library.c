@@ -1314,8 +1314,12 @@ void BKE_libblock_copy_ex(Main *bmain, const ID *id, ID **r_newid, const int fla
 		memcpy(cpn + id_offset, cp + id_offset, id_len - id_offset);
 	}
 
+	/* We do not want any handling of usercount in code duplicating the data here, we do that all
+	 * at once in id_copy_libmanagement_cb() at the end. */
+	const int copy_data_flag = flag | LIB_ID_CREATE_NO_USER_REFCOUNT;
+
 	if (id->properties) {
-		new_id->properties = IDP_CopyProperty_ex(id->properties, flag);
+		new_id->properties = IDP_CopyProperty_ex(id->properties, copy_data_flag);
 	}
 
 	/* the duplicate should get a copy of the animdata */
