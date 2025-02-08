@@ -34,20 +34,6 @@ CCL_NAMESPACE_BEGIN
 
 namespace {
 
-/* Some helpers to silence warning in templated function. */
-bool isfinite(uchar /*value*/)
-{
-	return true;
-}
-bool isfinite(half /*value*/)
-{
-	return true;
-}
-bool isfinite(uint16_t  /*value*/)
-{
-	return true;
-}
-
 /* The lower three bits of a device texture slot number indicate its type.
  * These functions convert the slot ids from ImageManager "images" ones
  * to device ones and vice verse.
@@ -658,10 +644,10 @@ bool ImageManager::file_load_image(Image *img,
 		if(is_rgba) {
 			for(size_t i = 0; i < num_pixels; i += 4) {
 				StorageType *pixel = &pixels[i*4];
-				if(!isfinite(pixel[0]) ||
-				   !isfinite(pixel[1]) ||
-				   !isfinite(pixel[2]) ||
-				   !isfinite(pixel[3]))
+				if(!isfinite((float)pixel[0]) ||
+				   !isfinite((float)pixel[1]) ||
+				   !isfinite((float)pixel[2]) ||
+				   !isfinite((float)pixel[3]))
 				{
 					pixel[0] = 0;
 					pixel[1] = 0;
@@ -673,7 +659,7 @@ bool ImageManager::file_load_image(Image *img,
 		else {
 			for(size_t i = 0; i < num_pixels; ++i) {
 				StorageType *pixel = &pixels[i];
-				if(!isfinite(pixel[0])) {
+				if(!isfinite((float)pixel[0])) {
 					pixel[0] = 0;
 				}
 			}
