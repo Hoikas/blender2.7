@@ -27,7 +27,7 @@ jobs:
               str: windows-x64-v143,
               deps-url: "https://github.com/Hoikas/blender2.7/releases/download/deps_20220327/dependencies-windows-x64-v143.zip",
               deps-output: lib/win64_vc17,
-              cuda: ON
+              cuda: OFF # Revent versions of the VS 2022 STL expect CUDA 12, so we're stuck.
             }
 
     runs-on: ${{ matrix.cfg.os }}
