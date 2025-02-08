@@ -2133,52 +2133,8 @@ void ViewMapBuilder::ComputeIntersections(ViewMap *ioViewMap, intersection_algo 
 #endif
 }
 
-struct less_SVertex2D : public binary_function<SVertex *, SVertex *, bool>
-{
-	real epsilon;
-
-	less_SVertex2D(real eps) : binary_function<SVertex *, SVertex *, bool>()
-	{
-		epsilon = eps;
-	}
-
-	bool operator()(SVertex *x, SVertex *y)
-	{
-		Vec3r A = x->point2D();
-		Vec3r B = y->point2D();
-		for (unsigned int i = 0; i < 3; i++) {
-			if ((fabs(A[i] - B[i])) < epsilon)
-				continue;
-			if (A[i] < B[i])
-				return true;
-			if (A[i] > B[i])
-				return false;
-		}
-		return false;
-	}
-};
-
 typedef Segment<FEdge *, Vec3r> segment;
 typedef Intersection<segment> intersection;
-
-struct less_Intersection : public binary_function<intersection *, intersection *, bool>
-{
-	segment *edge;
-
-	less_Intersection(segment *iEdge) : binary_function<intersection *, intersection *, bool>()
-	{
-		edge = iEdge;
-	}
-
-	bool operator()(intersection *x, intersection *y)
-	{
-		real tx = x->getParameter(edge);
-		real ty = y->getParameter(edge);
-		if (tx > ty)
-			return true;
-		return false;
-	}
-};
 
 struct silhouette_binary_rule : public binary_rule<segment, segment>
 {
@@ -2227,7 +2183,23 @@ void ViewMapBuilder::ComputeSweepLineIntersections(ViewMap *ioViewMap, real epsi
 
 	unsigned counter = progressBarStep;
 
-	sort(svertices.begin(), svertices.end(), less_SVertex2D(epsilon));
+	sort(
+		svertices.begin(),
+		svertices.end(),
+		[epsilon](SVertex* x, SVertex* y) {
+			Vec3r A = x->point2D();
+			Vec3r B = y->point2D();
+			for (unsigned int i = 0; i < 3; i++) {
+				if ((fabs(A[i] - B[i])) < epsilon)
+					continue;
+				if (A[i] < B[i])
+					return true;
+				if (A[i] > B[i])
+					return false;
+			}
+			return false;
+		}
+	);
 
 	SweepLine<FEdge *, Vec3r> SL;
 
@@ -2384,7 +2356,17 @@ void ViewMapBuilder::ComputeSweepLineIntersections(ViewMap *ioViewMap, real epsi
 
 		vector<intersection*>& eIntersections = (*s)->intersections();
 		// we first need to sort these intersections from farther to closer to A
-		sort(eIntersections.begin(), eIntersections.end(), less_Intersection(*s));
+		sort(
+			eIntersections.begin(),
+			eIntersections.end(),
+			[s](intersection* x, intersection* y) {
+				real tx = x->getParameter(*s);
+				real ty = y->getParameter(*s);
+				if (tx > ty)
+					return true;
+				return false;
+			}
+		);
 		for (i = eIntersections.begin(), iend = eIntersections.end(); i != iend; i++)
 			edgeVVertices.push_back((TVertex *)(*i)->userdata);
 
