@@ -841,7 +841,8 @@ static void shader_preview_free(void *customdata)
 
 		properties = IDP_GetProperties((ID *)sp->matcopy, false);
 		if (properties) {
-			IDP_FreeProperty(properties);
+			/* this is a deep copy of the original, so don't decrement the user counts */
+			IDP_FreeProperty_ex(properties, false);
 			MEM_freeN(properties);
 		}
 		MEM_freeN(sp->matcopy);
@@ -857,7 +858,8 @@ static void shader_preview_free(void *customdata)
 
 		properties = IDP_GetProperties((ID *)sp->texcopy, false);
 		if (properties) {
-			IDP_FreeProperty(properties);
+			/* this is a deep copy of the original, so don't decrement the user counts */
+			IDP_FreeProperty_ex(properties, false);
 			MEM_freeN(properties);
 		}
 		MEM_freeN(sp->texcopy);
@@ -873,7 +875,8 @@ static void shader_preview_free(void *customdata)
 
 		properties = IDP_GetProperties((ID *)sp->worldcopy, false);
 		if (properties) {
-			IDP_FreeProperty(properties);
+			/* this is a deep copy of the original, so don't decrement the user counts */
+			IDP_FreeProperty_ex(properties, false);
 			MEM_freeN(properties);
 		}
 		MEM_freeN(sp->worldcopy);
@@ -889,7 +892,8 @@ static void shader_preview_free(void *customdata)
 
 		properties = IDP_GetProperties((ID *)sp->lampcopy, false);
 		if (properties) {
-			IDP_FreeProperty(properties);
+			/* this is a deep copy of the original, so don't decrement the user counts */
+			IDP_FreeProperty_ex(properties, false);
 			MEM_freeN(properties);
 		}
 		MEM_freeN(sp->lampcopy);
