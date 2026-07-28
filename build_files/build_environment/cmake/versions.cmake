@@ -28,9 +28,9 @@ set(PNG_VERSION 1.6.37)
 set(PNG_URI http://prdownloads.sourceforge.net/libpng/libpng-${PNG_VERSION}.tar.xz)
 set(PNG_HASH 015e8e15db1eecde5f2eb9eb5b6e59e9)
 
-set(JPEG_VERSION 1.5.3)
+set(JPEG_VERSION 3.2.0)
 set(JPEG_URI https://github.com/libjpeg-turbo/libjpeg-turbo/archive/${JPEG_VERSION}.tar.gz)
-set(JPEG_HASH 5b7549d440b86c98a517355c102d155e)
+set(JPEG_HASH 47d465f8ba76031a6717afc70c91eaf3)
 
 set(BOOST_VERSION 1.78.0)
 set(BOOST_VERSION_NODOTS 1_78_0)
