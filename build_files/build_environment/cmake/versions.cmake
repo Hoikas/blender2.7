@@ -16,9 +16,9 @@
 #
 # ***** END GPL LICENSE BLOCK *****
 
-set(ZLIB_VERSION 1.2.12)
-set(ZLIB_URI https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz)
-set(ZLIB_HASH 91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9)
+set(ZLIB_VERSION 1.3.2)
+set(ZLIB_URI https://github.com/madler/zlib/releases/download/v${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz)
+set(ZLIB_HASH bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16)
 
 set(OPENAL_VERSION 1.18.2)
 set(OPENAL_URI http://openal-soft.org/openal-releases/openal-soft-${OPENAL_VERSION}.tar.bz2)
