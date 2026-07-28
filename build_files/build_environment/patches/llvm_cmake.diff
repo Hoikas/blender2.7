@@ -1,0 +1,21 @@
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index f8da6cf92119..c2a5f6a62a0a 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -6,12 +6,10 @@ cmake_policy(SET CMP0022 NEW)
+ 
+ cmake_policy(SET CMP0048 NEW)
+ 
+-# CMake 3.1 and higher include generator expressions of the form
+-# $<TARGETLIB:obj> in the SOURCES property.  These need to be
+-# stripped everywhere that access the SOURCES property, so we just
+-# defer to the OLD behavior of not including generator expressions
+-# in the output for now.
+-cmake_policy(SET CMP0051 OLD)
++# Commit a2133f1a681dbcfce14d705252c75eb741c0d7ec from llvm 8.0 says this policy
++# has not been needed because "Almost 2 years ago Takumi fixed that". llvm 8.0
++# and llvm 6.0.1 both released in 2018, so we should be safe to remove this.
++#cmake_policy(SET CMP0051 OLD)
+ 
+ cmake_policy(SET CMP0056 NEW)
+ 
