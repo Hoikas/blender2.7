@@ -90,10 +90,9 @@ set(ALEMBIC_VERSION 1.7.12)
 set(ALEMBIC_URI https://github.com/alembic/alembic/archive/${ALEMBIC_VERSION}.tar.gz)
 set(ALEMBIC_MD5 e2b3777f23c5c09481a008cc6f0f8a40)
 
-## hash is for 3.1.2
-set(GLFW_GIT_UID 30306e54705c3adae9fe082c816a3be71963485c)
-set(GLFW_URI https://github.com/glfw/glfw/archive/${GLFW_GIT_UID}.zip)
-set(GLFW_HASH 20cacb1613da7eeb092f3ac4f6b2b3d0)
+set(GLFW_VERSION 3.4)
+set(GLFW_URI https://github.com/glfw/glfw/releases/download/${GLFW_VERSION}/glfw-${GLFW_VERSION}.zip)
+set(GLFW_HASH 7d1e90c5c0011eb10eac280b6093d0d0)
 
 #latest uid in git as of 2016-04-01
 set(CLEW_GIT_UID 277db43f6cafe8b27c6f1055f69dc67da4aeb299)
