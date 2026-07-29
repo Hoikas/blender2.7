@@ -131,8 +131,8 @@ set(OPENMP_URI http://releases.llvm.org/${LLVM_VERSION}/openmp-${LLVM_VERSION}.s
 set(OPENMP_HASH 4826402ae3633c36c51ba4d0e5527d30)
 
 set(OPENIMAGEIO_VERSION 1.8.17)
-set(OPENIMAGEIO_URI https://github.com/OpenImageIO/oiio/archive/Release-${OPENIMAGEIO_VERSION}.tar.gz)
-set(OPENIMAGEIO_HASH 869005749cdbb88605f03b0625ca2085)
+set(OPENIMAGEIO_URI https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/refs/tags/Release-${OPENIMAGEIO_VERSION}.tar.gz)
+set(OPENIMAGEIO_HASH 69644da8d91862f9139291681a573e87)
 
 set(TIFF_VERSION 4.0.9)
 set(TIFF_URI http://download.osgeo.org/libtiff/tiff-${TIFF_VERSION}.tar.gz)

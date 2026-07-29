@@ -1,0 +1,60 @@
+diff --git a/src/cmake/externalpackages.cmake b/src/cmake/externalpackages.cmake
+index e69638bd1..854b5beb3 100644
+--- a/src/cmake/externalpackages.cmake
++++ b/src/cmake/externalpackages.cmake
+@@ -99,11 +99,11 @@ if (BOOST_CUSTOM)
+     # N.B. For a custom version, the caller had better set up the variables
+     # Boost_VERSION, Boost_INCLUDE_DIRS, Boost_LIBRARY_DIRS, Boost_LIBRARIES.
+ else ()
+-    set (Boost_COMPONENTS filesystem system thread)
++    set (Boost_COMPONENTS filesystem thread)
+     if (NOT USE_STD_REGEX)
+         list (APPEND Boost_COMPONENTS regex)
+     endif ()
+-    find_package (Boost 1.53 REQUIRED
++    find_package (Boost 1.69 REQUIRED
+                   COMPONENTS ${Boost_COMPONENTS})
+ endif ()
+ 
+diff --git a/src/socket.imageio/socket_pvt.h b/src/socket.imageio/socket_pvt.h
+index b2c4d8e02..44b2d46a1 100644
+--- a/src/socket.imageio/socket_pvt.h
++++ b/src/socket.imageio/socket_pvt.h
+@@ -77,7 +77,7 @@ class SocketOutput final : public ImageOutput {
+ 
+  private:
+     int m_next_scanline;             // Which scanline is the next to write?
+-    io_service io;
++    io_context io;
+     ip::tcp::socket socket;
+     std::vector<unsigned char> m_scratch;
+ 
+@@ -102,7 +102,7 @@ class SocketInput final : public ImageInput {
+ 
+  private:
+     int m_next_scanline;      // Which scanline is the next to read?
+-    io_service io;
++    io_context io;
+     ip::tcp::socket socket;
+     std::shared_ptr <ip::tcp::acceptor> acceptor;
+     
+diff --git a/src/socket.imageio/socketoutput.cpp b/src/socket.imageio/socketoutput.cpp
+index d784d4bc5..7874dd3c1 100644
+--- a/src/socket.imageio/socketoutput.cpp
++++ b/src/socket.imageio/socketoutput.cpp
+@@ -185,10 +185,11 @@ SocketOutput::connect_to_server (const std::string &name)
+ 
+     try {
+         ip::tcp::resolver resolver (io);
+-        ip::tcp::resolver::query query (rest_args["host"].c_str (),
+-                rest_args["port"].c_str ());
+-        ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve (query);
+-        ip::tcp::resolver::iterator end;
++        ip::tcp::resolver::results_type results = resolver.resolve (
++            rest_args["host"], rest_args["port"]
++        );
++        ip::tcp::resolver::results_type::iterator endpoint_iterator = results.begin ();
++        ip::tcp::resolver::results_type::iterator end = results.end ();
+ 
+         boost::system::error_code err = error::host_not_found;
+         while (err && endpoint_iterator != end) {

@@ -127,7 +127,9 @@ ExternalProject_Add(external_openimageio
 	PATCH_COMMAND
 		${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/src/include < ${PATCH_DIR}/openimageio_gdi.diff &&
 		${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/ < ${PATCH_DIR}/openimageio_static_libs.diff &&
-		${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/src/include < ${PATCH_DIR}/openimageio_fix_math_funcs.diff
+		${PATCH_CMD} -p 0 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio/src/include < ${PATCH_DIR}/openimageio_fix_math_funcs.diff &&
+		${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio < ${PATCH_DIR}/openimageio_boost.diff &&
+		${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/openimageio/src/external_openimageio < ${PATCH_DIR}/openimageio_cmake.diff
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LIBDIR}/openimageio ${DEFAULT_CMAKE_FLAGS} ${OPENIMAGEIO_EXTRA_ARGS}
 	INSTALL_DIR ${LIBDIR}/openimageio
 )

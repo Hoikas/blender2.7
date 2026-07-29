@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8a0840732..ce5a5b225 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,7 +14,6 @@ set (PROJECT_URL "http://openimageio.org")
+ message (STATUS "CMake version is ${CMAKE_VERSION}")
+ cmake_policy (SET CMP0017 NEW)  # Prefer files from the CMake module directory when including from there.
+ cmake_policy (SET CMP0025 NEW)  # Detect AppleClang for new CMake
+-cmake_policy (SET CMP0046 OLD)  # Don't error on non-existent dependency in add_dependencies.
+ set (CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
+ 
+ # Alternate names
