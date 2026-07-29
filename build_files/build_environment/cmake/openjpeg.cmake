@@ -32,6 +32,7 @@ ExternalProject_Add(external_openjpeg
 	DOWNLOAD_DIR ${DOWNLOAD_DIR}
 	URL_HASH SHA256=${OPENJPEG_HASH}
 	PREFIX ${BUILD_DIR}/openjpeg
+	PATCH_COMMAND ${PATCH_CMD} -p1 -N -d ${BUILD_DIR}/openjpeg/src/external_openjpeg < ${PATCH_DIR}/openjpeg_cmake.diff
 	CONFIGURE_COMMAND ${CONFIGURE_ENV} && cd ${BUILD_DIR}/openjpeg/src/external_openjpeg-build && ${CMAKE_COMMAND} ${OPENJPEG_EXTRA_ARGS} -DCMAKE_INSTALL_PREFIX=${LIBDIR}/openjpeg -DBUILD_SHARED_LIBS=Off -DBUILD_THIRDPARTY=OFF ${BUILD_DIR}/openjpeg/src/external_openjpeg
 	BUILD_COMMAND ${CONFIGURE_ENV} && cd ${BUILD_DIR}/openjpeg/src/external_openjpeg-build/ && make -j${MAKE_THREADS}
 	INSTALL_COMMAND ${CONFIGURE_ENV} && cd ${BUILD_DIR}/openjpeg/src/external_openjpeg-build/ && make install
@@ -46,6 +47,7 @@ if(MSVC)
 		DOWNLOAD_DIR ${DOWNLOAD_DIR}
 		URL_HASH SHA256=${OPENJPEG_HASH}
 		PREFIX ${BUILD_DIR}/openjpeg_msvc
+		PATCH_COMMAND ${PATCH_CMD} -p1 -N -d ${BUILD_DIR}/openjpeg_msvc/src/external_openjpeg_msvc < ${PATCH_DIR}/openjpeg_cmake.diff
 		CMAKE_ARGS ${OPENJPEG_EXTRA_ARGS} -DCMAKE_INSTALL_PREFIX=${LIBDIR}/openjpeg_msvc -DBUILD_SHARED_LIBS=Off -DBUILD_THIRDPARTY=OFF
 		INSTALL_DIR ${LIBDIR}/openjpeg_msvc
 	)
