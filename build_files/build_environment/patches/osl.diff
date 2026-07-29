@@ -1,7 +1,50 @@
-diff -Naur OpenShadingLanguage-Release-1.9.9/src/cmake/flexbison.cmake external_osl/src/cmake/flexbison.cmake
---- OpenShadingLanguage-Release-1.9.9/src/cmake/flexbison.cmake	2018-05-01 16:39:02 -0600
-+++ external_osl/src/cmake/flexbison.cmake	2018-08-23 15:42:27 -0600
-@@ -77,7 +77,7 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f3ff9723..8053904b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,7 +17,6 @@ message (STATUS "Building ${PROJECT_NAME} ${PROJECT_VERSION}")
+ message (STATUS "CMake version is ${CMAKE_VERSION}")
+ cmake_policy (SET CMP0017 NEW)  # Prefer files from the CMake module directory when including from there.
+ cmake_policy (SET CMP0025 NEW)  # Detect AppleClang for new CMake
+-cmake_policy (SET CMP0046 OLD)  # Don't error on non-existent dependency in add_dependencies.
+ set (CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
+ 
+ # Deprecated names
+diff --git a/src/cmake/externalpackages.cmake b/src/cmake/externalpackages.cmake
+index a442d578..7dddad30 100644
+--- a/src/cmake/externalpackages.cmake
++++ b/src/cmake/externalpackages.cmake
+@@ -89,15 +89,11 @@ if (NOT Boost_FIND_QUIETLY)
+     message (STATUS "BOOST_ROOT ${BOOST_ROOT}")
+ endif ()
+ 
+-if (NOT DEFINED Boost_ADDITIONAL_VERSIONS)
+-  set (Boost_ADDITIONAL_VERSIONS "1.63" "1.62" "1.61" "1.60"
+-                                 "1.59" "1.58" "1.57" "1.56" "1.55")
+-endif ()
+ if (LINKSTATIC)
+     set (Boost_USE_STATIC_LIBS ON)
+ endif ()
+ set (Boost_USE_MULTITHREADED ON)
+-set (Boost_COMPONENTS system thread)
++set (Boost_COMPONENTS thread)
+ if (NOT USE_STD_REGEX)
+     list (APPEND Boost_COMPONENTS regex)
+ endif ()
+@@ -136,7 +132,7 @@ endif ()
+ if (BOOST_CUSTOM)
+     set (Boost_FOUND true)
+ else ()
+-    find_package (Boost 1.55 REQUIRED
++    find_package (Boost 1.69 REQUIRED
+                   COMPONENTS ${Boost_COMPONENTS})
+ endif ()
+ 
+diff --git a/src/cmake/flexbison.cmake b/src/cmake/flexbison.cmake
+index ac34b678..fa68d03b 100644
+--- a/src/cmake/flexbison.cmake
++++ b/src/cmake/flexbison.cmake
+@@ -77,7 +77,7 @@ IF ( FLEX_EXECUTABLE AND BISON_EXECUTABLE )
            DEPENDS ${${compiler_headers}}
            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
          ADD_CUSTOM_COMMAND ( OUTPUT ${flexoutputcxx} 
@@ -10,25 +53,11 @@ diff -Naur OpenShadingLanguage-Release-1.9.9/src/cmake/flexbison.cmake external_
            MAIN_DEPENDENCY ${flexsrc}
            DEPENDS ${${compiler_headers}}
            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-diff -Naur OpenShadingLanguage-Release-1.9.9/src/cmake/flexbison.cmake.rej external_osl/src/cmake/flexbison.cmake.rej
---- OpenShadingLanguage-Release-1.9.9/src/cmake/flexbison.cmake.rej	1969-12-31 17:00:00 -0700
-+++ external_osl/src/cmake/flexbison.cmake.rej	2018-08-24 17:42:11 -0600
-@@ -0,0 +1,11 @@
-+--- src/cmake/flexbison.cmake	2018-05-01 16:39:02 -0600
-++++ src/cmake/flexbison.cmake	2018-08-24 10:24:03 -0600
-+@@ -77,7 +77,7 @@
-+           DEPENDS ${${compiler_headers}}
-+           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-+         ADD_CUSTOM_COMMAND ( OUTPUT ${flexoutputcxx} 
-+-          COMMAND ${FLEX_EXECUTABLE} -o ${flexoutputcxx} "${CMAKE_CURRENT_SOURCE_DIR}/${flexsrc}"
-++          COMMAND ${FLEX_EXECUTABLE} ${FLEX_EXTRA_OPTIONS} -o ${flexoutputcxx} "${CMAKE_CURRENT_SOURCE_DIR}/${flexsrc}"
-+           MAIN_DEPENDENCY ${flexsrc}
-+           DEPENDS ${${compiler_headers}}
-+           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
-diff -Naur OpenShadingLanguage-Release-1.9.9/src/include/OSL/llvm_util.h external_osl/src/include/OSL/llvm_util.h
---- OpenShadingLanguage-Release-1.9.9/src/include/OSL/llvm_util.h	2018-05-01 16:39:02 -0600
-+++ external_osl/src/include/OSL/llvm_util.h	2018-08-25 14:05:00 -0600
-@@ -33,6 +33,8 @@
+diff --git a/src/include/OSL/llvm_util.h b/src/include/OSL/llvm_util.h
+index 782af119..36fa75b0 100644
+--- a/src/include/OSL/llvm_util.h
++++ b/src/include/OSL/llvm_util.h
+@@ -33,6 +33,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  
  #include <vector>
  
@@ -37,7 +66,7 @@ diff -Naur OpenShadingLanguage-Release-1.9.9/src/include/OSL/llvm_util.h externa
  #ifdef LLVM_NAMESPACE
  namespace llvm = LLVM_NAMESPACE;
  #endif
-@@ -487,6 +489,7 @@
+@@ -487,6 +489,7 @@ public:
      std::string func_name (llvm::Function *f);
  
      static size_t total_jit_memory_held ();
@@ -45,10 +74,11 @@ diff -Naur OpenShadingLanguage-Release-1.9.9/src/include/OSL/llvm_util.h externa
  
  private:
      class MemoryManager;
-diff -Naur OpenShadingLanguage-Release-1.9.9/src/include/OSL/oslnoise.h external_osl/src/include/OSL/oslnoise.h
---- OpenShadingLanguage-Release-1.9.9/src/include/OSL/oslnoise.h	2018-05-01 16:39:02 -0600
-+++ external_osl/src/include/OSL/oslnoise.h	2018-08-24 17:42:11 -0600
-@@ -762,7 +762,7 @@
+diff --git a/src/include/OSL/oslnoise.h b/src/include/OSL/oslnoise.h
+index db6f089e..08de7ed7 100644
+--- a/src/include/OSL/oslnoise.h
++++ b/src/include/OSL/oslnoise.h
+@@ -762,7 +762,7 @@ OIIO_FORCEINLINE Dual2<float> extract (const Dual2<float4>& a)
  // packed into a float4. We assume T is float and VECTYPE is float4,
  // but it also works if T is Dual2<float> and VECTYPE is Dual2<float4>.
  template<typename T, typename VECTYPE>
@@ -57,10 +87,23 @@ diff -Naur OpenShadingLanguage-Release-1.9.9/src/include/OSL/oslnoise.h external
      VECTYPE xx = OIIO::lerp (abcd, OIIO::simd::shuffle<1,1,3,3>(abcd), u);
      return OIIO::simd::extract<0>(OIIO::lerp (xx,OIIO::simd::shuffle<2>(xx), v));
  }
-diff -Naur OpenShadingLanguage-Release-1.9.9/src/liboslexec/llvm_util.cpp external_osl/src/liboslexec/llvm_util.cpp
---- OpenShadingLanguage-Release-1.9.9/src/liboslexec/llvm_util.cpp	2018-05-01 16:39:02 -0600
-+++ external_osl/src/liboslexec/llvm_util.cpp	2018-08-25 14:04:27 -0600
-@@ -140,7 +140,10 @@
+diff --git a/src/liboslexec/CMakeLists.txt b/src/liboslexec/CMakeLists.txt
+index eb8f0fa9..0a4b9df8 100644
+--- a/src/liboslexec/CMakeLists.txt
++++ b/src/liboslexec/CMakeLists.txt
+@@ -158,7 +158,6 @@ TARGET_LINK_LIBRARIES ( oslexec
+                         ${LLVM_LIBRARY} ${LLVM_MCJIT_LIBRARY}
+                         ${LLVM_LIBRARIES} ${LLVM_LDFLAGS}
+                         ${LLVM_SYSTEM_LIBRARIES})
+-ADD_DEPENDENCIES (oslexec "${CMAKE_SOURCE_DIR}/src/build-scripts/hidesymbols.map")
+ 
+ install_targets (oslexec)
+ 
+diff --git a/src/liboslexec/llvm_util.cpp b/src/liboslexec/llvm_util.cpp
+index bf8d2575..4d8b3493 100644
+--- a/src/liboslexec/llvm_util.cpp
++++ b/src/liboslexec/llvm_util.cpp
+@@ -140,7 +140,10 @@ struct LLVM_Util::PerThreadInfo {
  };
  
  
