@@ -153,7 +153,7 @@ set(TBB_URI https://github.com/01org/tbb/archive/${TBB_VERSION}.tar.gz)
 set(TBB_HASH d180f4b025ff8432a447dd2f917cb3f6)
 
 set(OPENVDB_VERSION 5.1.0)
-set(OPENVDB_URI https://github.com/dreamworksanimation/openvdb/archive/v${OPENVDB_VERSION}.tar.gz)
+set(OPENVDB_URI https://github.com/AcademySoftwareFoundation/openvdb/archive/refs/tags/v${OPENVDB_VERSION}.tar.gz)
 set(OPENVDB_HASH 5310101f874dcfd2165f9cee68c22624)
 
 set(IDNA_VERSION 2.7)
