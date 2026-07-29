@@ -6,6 +6,7 @@ if NOT "%1" == "" (
     set VSVER_SHORT=12
     set BuildDir=VS12
     set CMAKE_BUILDER=Visual Studio 12 2013
+    set SLNEXT=sln
     goto par2
   )
 	if "%1" == "2015" (
@@ -14,6 +15,7 @@ if NOT "%1" == "" (
     set VSVER_SHORT=14
     set BuildDir=VS14
     set CMAKE_BUILDER=Visual Studio 14 2015
+    set SLNEXT=sln
     goto par2
   )
 	if "%1" == "2017" (
@@ -22,6 +24,7 @@ if NOT "%1" == "" (
     set VSVER_SHORT=15
     set BuildDir=VS15
     set CMAKE_BUILDER=Visual Studio 15 2017
+    set SLNEXT=sln
     goto par2
   )
 	if "%1" == "2019" (
@@ -30,6 +33,7 @@ if NOT "%1" == "" (
     set VSVER_SHORT=16
     set BuildDir=VS16
     set CMAKE_BUILDER=Visual Studio 16 2019
+    set SLNEXT=sln
     goto par2
   )
 	if "%1" == "2022" (
@@ -38,12 +42,22 @@ if NOT "%1" == "" (
     set VSVER_SHORT=17
     set BuildDir=VS17
     set CMAKE_BUILDER=Visual Studio 17 2022
+    set SLNEXT=sln
+    goto par2
+  )
+	if "%1" == "2026" (
+    echo "Building for VS2026"
+    set VSVER=18.0
+    set VSVER_SHORT=18
+    set BuildDir=VS18
+    set CMAKE_BUILDER=Visual Studio 18 2026
+    set SLNEXT=slnx
     goto par2
   )
 )
 :usage
 
-Echo Usage build_deps 2013/2015/2017/2019/2022 x64/x86
+Echo Usage build_deps 2013/2015/2017/2019/2022/2026 x64/x86
 goto exit
 :par2
 if NOT "%2" == "" (
@@ -121,7 +135,7 @@ cmake -G "%CMAKE_BUILDER%" -A %CMAKE_GENERATOR% %SOURCE_DIR% -DDOWNLOAD_DIR=%BUI
 echo %DATE% %TIME% : Release Configuration done >> %StatusFile%
 if "%dobuild%" == "1" (
 	msbuild /m "ll.vcxproj" /p:Configuration=Release /fl /flp:logfile=BlenderDeps_llvm.log;Verbosity=normal
-	msbuild /m "BlenderDependencies.sln" /p:Configuration=Release /fl /flp:logfile=BlenderDeps.log;Verbosity=minimal  /verbosity:minimal
+	msbuild /m "BlenderDependencies.%SLNEXT%" /p:Configuration=Release /fl /flp:logfile=BlenderDeps.log;Verbosity=minimal  /verbosity:minimal
 	echo %DATE% %TIME% : Release Build done >> %StatusFile%
 	cmake --build . --target Harvest_Release_Results  > Harvest_Release.txt
 )
@@ -133,7 +147,7 @@ cmake -G "%CMAKE_BUILDER%" -A %CMAKE_GENERATOR% %SOURCE_DIR% -DDOWNLOAD_DIR=%BUI
 echo %DATE% %TIME% : Debug Configuration done >> %StatusFile%
 if "%dobuild%" == "1" (
 	msbuild /m "ll.vcxproj" /p:Configuration=Debug /fl /flp:logfile=BlenderDeps_llvm.log;;Verbosity=normal 
-	msbuild /m "BlenderDependencies.sln" /p:Configuration=Debug /verbosity:n /fl /flp:logfile=BlenderDeps.log;;Verbosity=normal
+	msbuild /m "BlenderDependencies.%SLNEXT%" /p:Configuration=Debug /verbosity:n /fl /flp:logfile=BlenderDeps.log;;Verbosity=normal
 	echo %DATE% %TIME% : Debug Build done >> %StatusFile%
 	cmake --build . --target Harvest_Debug_Results > Harvest_Debug.txt
 )
