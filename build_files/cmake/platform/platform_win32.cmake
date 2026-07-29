@@ -375,7 +375,7 @@ if(WITH_BOOST)
 	set(Boost_USE_MULTITHREADED ON) # suffix -mt
 	set(Boost_USE_STATIC_LIBS ON) # suffix -s
 	if(WITH_WINDOWS_FIND_MODULES)
-		find_package(Boost COMPONENTS date_time filesystem thread regex system ${boost_extra_libs})
+		find_package(Boost COMPONENTS date_time filesystem thread regex ${boost_extra_libs})
 	endif()
 	if(NOT Boost_FOUND)
 		warn_hardcoded_paths(BOOST)
@@ -383,23 +383,21 @@ if(WITH_BOOST)
 		set(BOOST_INCLUDE_DIR ${BOOST}/include)
 		set(BOOST_LIBPATH ${BOOST}/lib)
 		if(CMAKE_CL_64)
-			set(BOOST_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-x64-1_78.lib")
-			set(BOOST_DEBUG_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-gd-x64-1_78.lib")
+			set(BOOST_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-x64-1_91.lib")
+			set(BOOST_DEBUG_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-gd-x64-1_91.lib")
 		else()
-			set(BOOST_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-x32-1_78.lib")
-			set(BOOST_DEBUG_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-gd-x32-1_78.lib")
+			set(BOOST_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-x32-1_91.lib")
+			set(BOOST_DEBUG_POSTFIX "vc${MSVC_TOOLSET_VERSION}-mt-gd-x32-1_91.lib")
 		endif()
 		set(BOOST_LIBRARIES
 			optimized ${BOOST_LIBPATH}/libboost_date_time-${BOOST_POSTFIX}
 			optimized ${BOOST_LIBPATH}/libboost_filesystem-${BOOST_POSTFIX}
 			optimized ${BOOST_LIBPATH}/libboost_regex-${BOOST_POSTFIX}
-			optimized ${BOOST_LIBPATH}/libboost_system-${BOOST_POSTFIX}
 			optimized ${BOOST_LIBPATH}/libboost_thread-${BOOST_POSTFIX}
 			optimized ${BOOST_LIBPATH}/libboost_chrono-${BOOST_POSTFIX}
 			debug ${BOOST_LIBPATH}/libboost_date_time-${BOOST_DEBUG_POSTFIX}
 			debug ${BOOST_LIBPATH}/libboost_filesystem-${BOOST_DEBUG_POSTFIX}
 			debug ${BOOST_LIBPATH}/libboost_regex-${BOOST_DEBUG_POSTFIX}
-			debug ${BOOST_LIBPATH}/libboost_system-${BOOST_DEBUG_POSTFIX}
 			debug ${BOOST_LIBPATH}/libboost_thread-${BOOST_DEBUG_POSTFIX}
 			debug ${BOOST_LIBPATH}/libboost_chrono-${BOOST_DEBUG_POSTFIX}
 		)

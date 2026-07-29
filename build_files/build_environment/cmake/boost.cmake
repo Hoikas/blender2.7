@@ -57,7 +57,7 @@ if(WIN32)
 	#set(BOOST_WITH_PYTHON --with-python)
 	set(BOOST_HARVEST_CMD 	${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/lib/ ${HARVEST_TARGET}/boost/lib/ )
 	if(BUILD_MODE STREQUAL Release)
-		set(BOOST_HARVEST_CMD ${BOOST_HARVEST_CMD} && ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/include/boost-1_78/ ${HARVEST_TARGET}/boost/include/)
+		set(BOOST_HARVEST_CMD ${BOOST_HARVEST_CMD} && ${CMAKE_COMMAND} -E copy_directory ${LIBDIR}/boost/include/boost-1_91/ ${HARVEST_TARGET}/boost/include/)
 	endif()
 
 elseif(APPLE)
@@ -82,7 +82,8 @@ set(BOOST_OPTIONS
 	--with-locale
 	--with-thread
 	--with-regex
-	--with-system
+	# header only in modern boosts
+	#--with-system
 	--with-date_time
 	--with-wave
 	--with-atomic
