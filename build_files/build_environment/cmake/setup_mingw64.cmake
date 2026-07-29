@@ -55,10 +55,11 @@ if((NOT EXISTS "${DOWNLOAD_DIR}/mingw/mingw64/ming64sh.cmd") AND (EXISTS "${DOWN
 endif()
 
 message("Checking for pkg-config")
-if(NOT EXISTS "${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip")
-	message("Downloading pkg-config")
-	file(DOWNLOAD "https://master.dl.sourceforge.net/project/pkgconfiglite/0.28-1/pkg-config-lite-0.28-1_bin-win32.zip" "${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip")
-endif()
+file(DOWNLOAD
+	"https://master.dl.sourceforge.net/project/pkgconfiglite/0.28-1/pkg-config-lite-0.28-1_bin-win32.zip"
+	"${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip"
+	EXPECTED_HASH SHA256=2038c49d23b5ca19e2218ca89f06df18fe6d870b4c6b54c0498548ef88771f6f
+)
 
 # extract pkgconfig
 if((NOT EXISTS "${DOWNLOAD_DIR}/mingw/mingw64/bin/pkg-config.exe") AND (EXISTS "${DOWNLOAD_DIR}/pkg-config-lite-0.28-1_bin-win32.zip"))
