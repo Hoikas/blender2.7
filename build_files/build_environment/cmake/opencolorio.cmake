@@ -43,10 +43,12 @@ if(WIN32)
 		-DOCIO_PYGLUE_LIB_PREFIX=OFF
 		-DUSE_EXTERNAL_TINYXML=ON
 		-DTINYXML_INCLUDE_DIR=${LIBDIR}/tinyxml/include
-		-DTINYXML_LIBRARY=${LIBDIR}/tinyxml/lib/tinyxml${libext}
+		-DTINYXML_LIBRARY=${LIBDIR}/tinyxml/lib/tinyxml${LIBEXT}
 		-DUSE_EXTERNAL_YAML=ON
 		-DYAML_CPP_FOUND=ON
 		-DYAML_CPP_VERSION=${YAMLCPP_VERSION}
+		-DYAML_CPP_INCLUDE_DIRS=${LIBDIR}/yamlcpp/include
+		-DYAML_CPP_LIBRARIES=${LIBDIR}/yamlcpp/lib/libyaml-cppmd{$LIBEXT}
 		-DUSE_EXTERNAL_LCMS=ON
 		-DINC_1=${LIBDIR}/tinyxml/include
 		-DINC_2=${LIBDIR}/yamlcpp/include
@@ -65,7 +67,7 @@ ExternalProject_Add(external_opencolorio
 	DOWNLOAD_DIR ${DOWNLOAD_DIR}
 	URL_HASH MD5=${OPENCOLORIO_HASH}
 	PREFIX ${BUILD_DIR}/opencolorio
-	PATCH_COMMAND ${PATCH_CMD} -p 1 -N -d ${BUILD_DIR}/opencolorio/src/external_opencolorio < ${PATCH_DIR}/${OCIO_PATCH}
+	PATCH_COMMAND ${PATCH_CMD} -p 1 -d ${BUILD_DIR}/opencolorio/src/external_opencolorio < ${PATCH_DIR}/${OCIO_PATCH}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LIBDIR}/opencolorio ${DEFAULT_CMAKE_FLAGS} ${OPENCOLORIO_EXTRA_ARGS}
 	INSTALL_DIR ${LIBDIR}/opencolorio
 )

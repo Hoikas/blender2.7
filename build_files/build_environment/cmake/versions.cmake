@@ -117,7 +117,7 @@ set(OPENCOLLADA_URI https://github.com/KhronosGroup/OpenCOLLADA/archive/${OPENCO
 set(OPENCOLLADA_HASH ee7dae874019fea7be11613d07567493)
 
 set(OPENCOLORIO_VERSION 1.1.0)
-set(OPENCOLORIO_URI https://github.com/imageworks/OpenColorIO/archive/v${OPENCOLORIO_VERSION}.tar.gz)
+set(OPENCOLORIO_URI https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v${OPENCOLORIO_VERSION}.tar.gz)
 set(OPENCOLORIO_HASH 802d8f5b1d1fe316ec5f76511aa611b8)
 
 set(LLVM_VERSION 6.0.1)
