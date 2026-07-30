@@ -11,14 +11,18 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-          - { os: windows-2019, generator: Visual Studio 16 2019, arch: Win32, str: windows-x86-v142 }
-          - { os: windows-2019, generator: Visual Studio 16 2019, arch: x64, str: windows-x64-v142 }
-          - { os: windows-2022, generator: Visual Studio 17 2022, arch: Win32, str: windows-x86-v143 }
-          - { os: windows-2022, generator: Visual Studio 17 2022, arch: x64, str: windows-x64-v143 }
+          - { os: windows-2022, generator: Visual Studio 17 2022, arch: Win32, str: windows-x86-v143, sln: BlenderDependencies.sln }
+          - { os: windows-2022, generator: Visual Studio 17 2022, arch: x64, str: windows-x64-v143, sln: BlenderDependencies.sln }
+          - { os: windows-2025-vs2026, generator: Visual Studio 18 2026, arch: Win32, str: windows-x86-v145, sln: BlenderDependencies.slnx }
+          - { os: windows-2025-vs2026, generator: Visual Studio 18 2026, arch: x64, str: windows-x64-v145, sln: BlenderDependencies.slnx }
 
     env:
       CMAKE_GENERATOR: ${{ matrix.cfg.generator }}
       CMAKE_GENERATOR_PLATFORM: ${{ matrix.cfg.arch }}
+      # CMake 4.0+ drops support for CMake <=3.4, so we have to force the minimum policy
+      # version higher. Thankfully, 3.4 is the oldest version I see in the deps, so this
+      # should suffice... for now.
+      CMAKE_POLICY_VERSION_MINIMUM: "3.5"
 
     runs-on: ${{ matrix.cfg.os }}
     steps:
@@ -60,7 +64,7 @@ jobs:
           Write-Host "Building LLVM..."
           MSBuild /m "ll.vcxproj" /p:Configuration=Release
           Write-Host "`n`nBuilding Blender Dependencies..."
-          MSBuild /m "BlenderDependencies.sln" /p:Configuration=Release
+          MSBuild /m "${{ matrix.cfg.sln }}" /p:Configuration=Release
           Write-Host "`n`nHarvesting Dependencies..."
           cmake --build . --config Release -j 2 --target Harvest_Release_Results
 
